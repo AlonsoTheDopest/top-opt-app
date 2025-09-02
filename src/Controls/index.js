@@ -6,11 +6,28 @@ export default function Controls() {
             <h2>Controls</h2>
             <form action="" method="post">
                 <label htmlFor="load">Load:</label>
-                <input type="range" name="load" />
+                <input 
+                    type="range" 
+                    name="load"
+                    min="-1.0"
+                    max="1.0"
+                    step="0.1" 
+                />
                 <label htmlFor="volume-fraction">Volume Fraction:</label>
-                <input type="range" name="volume-fraction" />
+                <input 
+                    type="range" 
+                    name="volume-fraction" 
+                    min="-1.0"
+                    max="1.0"
+                    step="0.1" 
+                />
                 <label htmlFor="iterations">Iterations:</label>
-                <input type="range" name="iterations" />
+                <input 
+                    type="range" 
+                    name="iterations" 
+                    min="100"
+                    max="5000"
+                    step="100" />
                 <input type="submit" value="Run Optimization"></input>
             </form>
         </>
