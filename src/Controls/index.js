@@ -12,7 +12,7 @@ export default function Controls() {
         <>
             <h2>Controls</h2>
             
-            <form action="" method="post">
+            <form action="/api/run-top-opt" method="post">
 
                 <label htmlFor="beam-type">Beam Type:</label>
                 <select name="beam-type" value={ beamType } onChange={ ( event ) => setBeamType( event.target.value ) }>
