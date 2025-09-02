@@ -5,6 +5,11 @@ export default function Controls() {
         <>
             <h2>Controls</h2>
             <form action="" method="post">
+                <label htmlFor="beam-type">Beam Type:</label>
+                <select name="beam-type">
+                    <option value="cantilever">Cantilever</option>
+                    <option value="half-mmb">Half MMB</option>
+                </select>
                 <label htmlFor="load">Load:</label>
                 <input 
                     type="range" 
