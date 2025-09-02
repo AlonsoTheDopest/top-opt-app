@@ -1,6 +1,13 @@
 import "./index.css"
+import { useState } from "react"
 
 export default function Controls() {
+
+    const [ beamType, setBeamType ] = useState( "Cantilever" )
+    const [ load, setLoad ] = useState( 1.0 )
+    const [ volumeFraction, setVolumeFraction ] = useState( 0.9 )
+    const [ iterations, setIterations ] = useState( 5000 )
+
     return ( 
         <>
             <h2>Controls</h2>
@@ -8,7 +15,7 @@ export default function Controls() {
             <form action="" method="post">
 
                 <label htmlFor="beam-type">Beam Type:</label>
-                <select name="beam-type">
+                <select name="beam-type" value={ beamType } onChange={ (e) => setBeamType( e.target.value ) }>
                     <option value="cantilever">Cantilever</option>
                     <option value="half-mmb">Half MMB</option>
                 </select>
@@ -19,17 +26,23 @@ export default function Controls() {
                     name="load"
                     min="-1.0"
                     max="1.0"
-                    step="0.1" 
+                    step="0.1"
+                    value={ load }
+                    onChange={ (e) => setLoad( e.target.value ) }
                 />
+                <p>{ load }</p>
 
                 <label htmlFor="volume-fraction">Volume Fraction:</label>
                 <input 
                     type="range" 
                     name="volume-fraction" 
-                    min="-1.0"
-                    max="1.0"
+                    min="0.1"
+                    max="0.9"
                     step="0.1" 
+                    value={ volumeFraction }
+                    onChange={ (e) => setVolumeFraction( e.target.value ) }
                 />
+                <p>{ volumeFraction }</p>
 
                 <label htmlFor="iterations">Iterations:</label>
                 <input 
@@ -37,7 +50,12 @@ export default function Controls() {
                     name="iterations" 
                     min="100"
                     max="5000"
-                    step="100" />
+                    step="100" 
+                    value={ iterations }
+                    onChange={ (e) => setIterations( e.target.value ) }
+                />
+                <p>{ iterations }</p>
+
                 <input type="submit" value="Run Optimization"></input>
 
             </form>
