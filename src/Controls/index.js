@@ -4,12 +4,15 @@ export default function Controls() {
     return ( 
         <>
             <h2>Controls</h2>
+            
             <form action="" method="post">
+
                 <label htmlFor="beam-type">Beam Type:</label>
                 <select name="beam-type">
                     <option value="cantilever">Cantilever</option>
                     <option value="half-mmb">Half MMB</option>
                 </select>
+
                 <label htmlFor="load">Load:</label>
                 <input 
                     type="range" 
@@ -18,6 +21,7 @@ export default function Controls() {
                     max="1.0"
                     step="0.1" 
                 />
+
                 <label htmlFor="volume-fraction">Volume Fraction:</label>
                 <input 
                     type="range" 
@@ -26,6 +30,7 @@ export default function Controls() {
                     max="1.0"
                     step="0.1" 
                 />
+
                 <label htmlFor="iterations">Iterations:</label>
                 <input 
                     type="range" 
@@ -34,6 +39,7 @@ export default function Controls() {
                     max="5000"
                     step="100" />
                 <input type="submit" value="Run Optimization"></input>
+
             </form>
         </>
     );
