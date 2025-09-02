@@ -1,5 +1,6 @@
 import "./index.css"
 import { useState } from "react"
+import axios from "axios"
 
 export default function Controls() {
 
@@ -8,11 +9,27 @@ export default function Controls() {
     const [ volumeFraction, setVolumeFraction ] = useState( 0.9 )
     const [ iterations, setIterations ] = useState( 5000 )
 
+    const runTopOpt = () => {
+
+        const topOptArgs = {
+            beamType: beamType,
+            load: load,
+            volumeFraction: volumeFraction,
+            iterations: iterations
+        }
+
+        axios.post( "http://localhost:8080/submit-top-opt-args", topOptArgs, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
     return ( 
         <>
             <h2>Controls</h2>
             
-            <form action="/api/run-top-opt" method="post">
+            <form>
 
                 <label htmlFor="beam-type">Beam Type:</label>
                 <select name="beam-type" value={ beamType } onChange={ ( event ) => setBeamType( event.target.value ) }>
@@ -56,7 +73,7 @@ export default function Controls() {
                 />
                 <p>{ iterations }</p>
 
-                <input type="submit" value="Run Optimization"></input>
+                <input type="submit" value="Run Optimization" onClick={ runTopOpt }></input>
 
             </form>
         </>
