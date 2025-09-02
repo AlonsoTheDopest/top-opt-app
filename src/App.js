@@ -1,13 +1,14 @@
-import './App.css';
-import "./Header"
-import Header from './Header';
-import Controls from "./Controls";
+import './App.css'
+import Header from "./Header"
+import Controls from "./Controls"
+import Output from "./Output"
 
 function App() {
   return (
     <>
       <Header />
       <Controls />
+      <Output />
     </>
   );
 }
