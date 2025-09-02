@@ -1,8 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const cors = require('cors');
-const http = require('http')
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+const cors = require('cors')
+const axios = require('axios')
 
 app.use(cors())
 
@@ -18,14 +18,21 @@ app.post( "/submit-top-opt-args", ( req, res ) => {
     const volumeFraction = req.body.volumeFraction
     const iterations = req.body.iterations
 
-    console.log( `Beam Type: ${ beamType }` )
-    console.log( `Load: ${ load }` )
-    console.log( `Volume Fraction: ${ volumeFraction }` )
-    console.log( `Iterations: ${ iterations }` )
+    console.log( beamType )
+    console.log( load )
+    console.log( volumeFraction )
+    console.log( iterations )
 
-    http.get('http://localhost:8081/run-top-opt', resp => {
+    const topOptArgs = {
+        beamType: beamType,
+        load: load,
+        volumeFraction: volumeFraction,
+        iterations: iterations
+    }
 
-    })
+    console
+
+    axios.post('http://localhost:8081/run-top-opt', topOptArgs )
 
 })
 

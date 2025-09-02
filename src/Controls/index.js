@@ -4,7 +4,7 @@ import axios from "axios"
 
 export default function Controls() {
 
-    const [ beamType, setBeamType ] = useState( "Cantilever" )
+    const [ beamType, setBeamType ] = useState( "cantilever" )
     const [ load, setLoad ] = useState( 1.0 )
     const [ volumeFraction, setVolumeFraction ] = useState( 0.9 )
     const [ iterations, setIterations ] = useState( 5000 )
