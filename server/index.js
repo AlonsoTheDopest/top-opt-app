@@ -30,8 +30,6 @@ app.post( "/submit-top-opt-args", ( req, res ) => {
         iterations: iterations
     }
 
-    console
-
     axios.post('http://localhost:8081/run-top-opt', topOptArgs )
 
 })
