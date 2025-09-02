@@ -15,7 +15,7 @@ export default function Controls() {
             <form action="" method="post">
 
                 <label htmlFor="beam-type">Beam Type:</label>
-                <select name="beam-type" value={ beamType } onChange={ (e) => setBeamType( e.target.value ) }>
+                <select name="beam-type" value={ beamType } onChange={ ( event ) => setBeamType( event.target.value ) }>
                     <option value="cantilever">Cantilever</option>
                     <option value="half-mmb">Half MMB</option>
                 </select>
@@ -28,7 +28,7 @@ export default function Controls() {
                     max="1.0"
                     step="0.1"
                     value={ load }
-                    onChange={ (e) => setLoad( e.target.value ) }
+                    onChange={ ( event ) => setLoad( event.target.value ) }
                 />
                 <p>{ load }</p>
 
@@ -40,7 +40,7 @@ export default function Controls() {
                     max="0.9"
                     step="0.1" 
                     value={ volumeFraction }
-                    onChange={ (e) => setVolumeFraction( e.target.value ) }
+                    onChange={ ( event ) => setVolumeFraction( event.target.value ) }
                 />
                 <p>{ volumeFraction }</p>
 
@@ -52,7 +52,7 @@ export default function Controls() {
                     max="5000"
                     step="100" 
                     value={ iterations }
-                    onChange={ (e) => setIterations( e.target.value ) }
+                    onChange={ ( event ) => setIterations( event.target.value ) }
                 />
                 <p>{ iterations }</p>
 
