@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
+const http = require('http')
 
 app.use(cors())
 
@@ -21,6 +22,10 @@ app.post( "/submit-top-opt-args", ( req, res ) => {
     console.log( `Load: ${ load }` )
     console.log( `Volume Fraction: ${ volumeFraction }` )
     console.log( `Iterations: ${ iterations }` )
+
+    http.get('http://localhost:8081/run-top-opt', resp => {
+
+    })
 
 })
 

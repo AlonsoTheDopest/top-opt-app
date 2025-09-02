@@ -9,7 +9,7 @@ export default function Controls() {
     const [ volumeFraction, setVolumeFraction ] = useState( 0.9 )
     const [ iterations, setIterations ] = useState( 5000 )
 
-    const runTopOpt = () => {
+    const runTopOpt = ( event ) => {
 
         const topOptArgs = {
             beamType: beamType,
@@ -23,6 +23,8 @@ export default function Controls() {
                 'Content-Type': 'application/json'
             }
         })
+
+        event.preventDefault()
     }
 
     return ( 
