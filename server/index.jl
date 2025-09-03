@@ -13,7 +13,7 @@ route("/run-top-opt", method = POST ) do
 
     if beamType == "cantilever"
         println( "Running cantilever beam optimization with load = $load, volume fraction = $volumeFraction, iterations = $iterations" )
-    else 
+    else # beamType == "half-mmb"
         println( "Running half MMB beam optimization with load = $load, volume fraction = $volumeFraction, iterations = $iterations" )
     end
 
