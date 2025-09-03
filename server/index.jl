@@ -9,12 +9,10 @@ route("/run-top-opt", method = POST ) do
     volumeFraction = payload["volumeFraction"]
     iterations = payload["iterations"]
 
-    println( payload )
-
     if beamType == "cantilever"
-        println( "Running cantilever beam optimization with load = $load, volume fraction = $volumeFraction, iterations = $iterations" )
+        println( "Running cantilever beam optimization" )
     else # beamType == "half-mmb"
-        println( "Running half MMB beam optimization with load = $load, volume fraction = $volumeFraction, iterations = $iterations" )
+        println( "Running half MMB beam optimization" )
     end
 
 end
