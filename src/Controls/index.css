@@ -1,0 +1,18 @@
+
+#controlBody{
+    font-size: 200%;
+}
+.controlOptions{
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.options{
+ 
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
