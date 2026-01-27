@@ -1,0 +1,52 @@
+:root {
+    --global-font-size: 1.4rem; 
+}
+
+
+footer {
+    min-height: 100vh; 
+    background-color: rgba(45, 45, 45, 0.205); 
+    color: black; 
+    padding: 1%;
+}
+
+p {
+    font-size: var(--global-font-size) !important;
+    margin-bottom: 0.5rem;
+}
+
+
+label, 
+.form-label,
+.controlText,
+.lastRun,
+.timer-display {
+    font-size: var(--global-font-size) !important;
+    font-weight: bold;
+}
+
+
+.form-select,
+.form-control, 
+.form-range,
+.large-control-input,
+.beam-type-select {
+    font-size: var(--global-font-size) !important;
+    height: auto !important;
+    padding: 1rem !important; 
+}
+
+
+.beam-type-select {
+    border-radius: 50% 20% / 10% 40%;
+}
+
+
+.large-control-button,
+.btn {
+    font-size: var(--global-font-size) !important;
+    padding: 1rem 2rem !important;
+    border-radius: 1rem !important;
+    width: 100%;
+    max-width: 600px;
+}

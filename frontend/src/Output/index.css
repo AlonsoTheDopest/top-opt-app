@@ -1,0 +1,154 @@
+:root {
+
+    --main-beam-height: 25vh;  
+    
+
+    --banner-height: 35vh;     
+}
+
+
+
+/* Standard Typography */
+p { font-size: 1.4rem !important; }
+label, .form-label { font-size: 1.4rem !important; font-weight: bold; }
+
+/* Main Wrapper */
+.output-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    gap: 2rem;
+}
+
+/* --- IMAGE SIZING --- */
+.banner-display img {
+    height: var(--banner-height);
+    width: auto;
+    object-fit: contain;
+}
+
+.main-beam-display img {
+    height: var(--main-beam-height);
+    width: auto;
+    max-width: 100%; 
+    object-fit: contain;
+    display: block;
+}
+
+/* --- WRAPPERS --- */
+.imageBodyHolder {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    position: relative;
+    display: flex;
+    
+    /* CHANGE 1: Stack items vertically (Controls on top, Image below) */
+    flex-direction: column; 
+    
+    align-items: center;
+    justify-content: center;
+}
+
+.main-beam-display {
+    height: auto;
+    width: auto;
+    max-width: 90vw; 
+}
+
+/* --- CANTILEVER SPECIFIC --- */
+.cantilever-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0px; 
+    flex-wrap: wrap; 
+}
+
+/* --- VERTICAL SLIDER CONTAINER --- */
+.force-load-right-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: var(--main-beam-height); 
+    min-width: 5%;
+    max-width: 10%; 
+}
+
+/* --- ROTATED SLIDER --- */
+.force-load-slider.vertical-rotated {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--main-beam-height); 
+    height: 15px;
+    transform: rotate(-90deg);
+    margin-top: calc((var(--main-beam-height) - 15px) / 2);
+    margin-bottom: calc((var(--main-beam-height) - 15px) / 2);
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.force-load-slider.vertical-rotated::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 20px solid #007bff; 
+    background: transparent;
+    cursor: pointer;
+}
+
+/* --- HALF MMB OVERLAY (Top Horizontal) --- */
+.force-load-top-middle {
+    /* CHANGE 2: Removed 'position: absolute' so it stops floating over the image */
+    position: relative; 
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    
+    /* CHANGE 3: Added margin to push the image down */
+    margin-bottom: 20px; 
+}
+
+.force-load-top-middle .form-label p,
+.force-load-right-side .form-label p {
+    font-size: 1.4rem !important;
+    margin-bottom: 5px !important;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.force-load-slider.horizontal {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 15px;
+}
+
+.force-load-slider.horizontal::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 20px solid #007bff;
+    background: transparent;
+    cursor: pointer;
+    margin-top: -5px;
+}

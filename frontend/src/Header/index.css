@@ -1,0 +1,24 @@
+
+.main-header {
+    background-color: rgba(77, 76, 77, 0.726); 
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    padding: 1%;
+    position: relative;      
+    width: 100%;
+}
+
+.headerH1 {
+    color: rgb(255 255 204);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin: 0; 
+    text-align: center;
+}
+
+.Guide_Section {
+    position: absolute; 
+    right: 5%;        
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
+    font-size: 1.2rem;  
+}
