@@ -25,7 +25,7 @@ using CairoMakie, GridapMakie
 
 const  E_mat = 1.0
 const  ν_mat = 0.3 
-const  penal = 3;
+const  penal = 3
 
 model = GmshDiscreteModel("./mesh.msh"); 
 

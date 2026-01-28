@@ -6,9 +6,12 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({ beamType, setBeamType, setSimulationImage }) {
     
-    const [volumeFraction, setVolumeFraction] = useState(0.5);
-    const [iterations, setIterations] = useState(2500);
-    const [load, setLoad] = useState(0.1); 
+    const [volumeFraction, setVolumeFraction] = useState(0.3);
+    const [iterations, setIterations] = useState(500);
+    const [load, setLoad] = useState(-1.0); 
+    const [ length, setLength ] = useState(60.0);
+    const [ height, setHeight ] = useState(20.0);
+    const [ loadLocation, setLoadLocation ] = useState( 10.0 );
 
     const [isLoading, setIsLoading] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -36,7 +39,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
             setElapsedTime(seconds);
         }, 1000);
 
-        const topOptArgs = { beamType, volumeFraction, iterations, load };
+        const topOptArgs = { beamType, volumeFraction, iterations, load, loadLocation, length, height };
 
         try {
             const res = await fetch("/run-top-opt", {
@@ -76,7 +79,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
         if (val === 0) val = 0.1; 
         setLoad(val);
     };
-    
+
     return (
         
         <>
@@ -95,7 +98,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                                     onChange={(e) => setBeamType(e.target.value)} 
                                 >
                                     <option value="cantilever">Cantilever</option>
-                                    <option value="half-mmb">Half MBB</option>
+                                    <option value="half-mbb">Half MBB</option>
                                 </select>
                             </Col>
                         </Row>
@@ -123,7 +126,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                                     name="volume-fraction"
                                     min="0.1" max="0.9" step="0.1"
                                     value={volumeFraction}
-                                    onChange={(e) => setVolumeFraction(e.target.value)}
+                                    onChange={(e) => setVolumeFraction( Number( e.target.value ) ) }
                                 />
                             </Col>
                         </Row>
@@ -139,7 +142,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                                     min="0" max="2000"
                                     step="100"
                                     value={iterations}
-                                    onChange={(e) => setIterations(e.target.value)}
+                                    onChange={(e) => setIterations( Number( e.target.value ) )}
                                 />
                             </Col>
                         </Row>
