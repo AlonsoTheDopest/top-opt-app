@@ -1,0 +1,25 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/home/react/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: genie-backend
+    ports:
+      - "8000:8000"
+      - "80:80"
+    volumes:
+      - ./backend:/home/genie/app
+    environment:
+      - GENIE_ENV=dev
+      - JULIA_REVISE=on
