@@ -2,7 +2,8 @@
 
 `$ cd backend`
 `$ julia --project=@. -e 'using Pkg; Pkg.instantiate()'`
-`$ ./backend/bin/server`
+For Linux/MacOS: `$ ./bin/server`
+For Windows: TBA
 
 # Start Frontend
 
