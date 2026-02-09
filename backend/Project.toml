@@ -4,6 +4,7 @@ authors = ["AlonsoTheDopest <138828524+AlonsoTheDopest@users.noreply.github.com>
 version = "0.1.0"
 
 [deps]
+Base64 = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -19,6 +20,7 @@ NLopt = "76087f3c-5699-56af-9a33-bf431cd00edd"
 Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
 [compat]
+Base64 = "1.11.0"
 CairoMakie = "0.15.8"
 ChainRulesCore = "1.26.0"
 Dates = "1.11.0"

@@ -1,0 +1,106 @@
+:root {
+    
+    
+    /* Height for the TOP section (Setup + Slider) */
+    --main-beam-height: 30vh;  
+    
+    /* Height for the BOTTOM section (Result / Loading) */
+    --banner-height: 35vh;     
+}
+
+/* Standard Typography */
+p { font-size: 1.4rem !important; }
+label, .form-label { font-size: 1.4rem !important; font-weight: bold; }
+
+/* Main Wrapper */
+.output-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    min-height: 50vh;
+    gap: 4rem;
+}
+
+/* --- IMAGE SIZING --- */
+
+/* Bottom Result Image */
+.banner-display img {
+    height: var(--banner-height);
+    width: 40vw;
+    object-fit: contain;
+}
+
+/* Top Setup Image */
+.main-beam-display img {
+    height: var(--main-beam-height);
+    width: 40vw;
+    max-width: 100%; 
+    object-fit: contain;
+    display: block;
+    
+}
+
+
+.imageBodyHolder {
+    
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    position: relative;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+}
+
+.main-beam-display {
+    height: auto;
+    width: auto;
+    max-width: 90vw; 
+}
+
+
+.force-load-top-middle {
+    position: relative; 
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    margin-bottom: 20px; 
+}
+
+.force-load-top-middle .form-label p {
+    font-size: 1.4rem !important;
+    margin-bottom: 5px !important;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.force-load-slider.horizontal {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 15px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.force-load-slider.horizontal::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 20px solid #007bff;
+    background: transparent;
+    cursor: pointer;
+    margin-top: -5px; 
+}

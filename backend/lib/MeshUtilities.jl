@@ -11,7 +11,6 @@ function createBeamMesh( length::Float64, height::Float64, beam_type::String, lo
     gmsh.initialize()
     if gmsh.isInitialized() == 1
         println( "Gmsh initialized successfully." )
-        # gmsh.option.setNumber( "General.Terminal", 1 ) # Enable terminal output
         gmsh.option.setNumber( "Mesh.Algorithm", 6 ) # Frontal-Delaunay for 2D
         createBeam( length, height, beam_type, load_position )
         gmsh.model.mesh.generate( 2 )
@@ -53,6 +52,7 @@ function addPhysicalGroups( linesVec, area, beam_type::String )
         gmsh.model.setPhysicalName( 1, leftSupportPhysGroup, "LeftSupport" )
 
     else # Half-MBB
+
         rightline = linesVec[ 2 ]
         loadLine = linesVec[ 4 ]
         leftLine = linesVec[ end ]

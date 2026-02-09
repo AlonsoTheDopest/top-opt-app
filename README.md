@@ -1,10 +1,17 @@
 # Start Backend
 
-`./backend/bin/server`
+`$ cd backend`
+`$ julia --project=@. -e 'using Pkg; Pkg.instantiate()'`
+For Linux/MacOS: `$ ./bin/server`
+For Windows: TBA
 
 # Start Frontend
 
-`npm start`
+`$ cd frontend`
+
+`$ npm i`
+
+`$ npm start`
 
 <!-- # Getting Started with Create React App
 
