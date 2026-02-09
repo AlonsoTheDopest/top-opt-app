@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import "./index.css"
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 // 1. ADD setSimulationImage TO PROPS
