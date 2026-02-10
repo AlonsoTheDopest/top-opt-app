@@ -9,8 +9,10 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
     const [volumeFraction, setVolumeFraction] = useState(0.3);
     const [iterations, setIterations] = useState(500);
     const [load, setLoad] = useState(-1.0); 
-    const [ length, setLength ] = useState(60.0);
-    const [ height, setHeight ] = useState(20.0);
+    const length = 60.0
+    const height = 20.0
+    // const [ length, setLength ] = useState(60.0);
+    // const [ height, setHeight ] = useState(20.0);
     const [ loadLocation, setLoadLocation ] = useState( 10.0 );
 
     const [isLoading, setIsLoading] = useState(false);
@@ -71,14 +73,25 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
             setElapsedTime(0);
         }
     };
-
-    
     
     const handleLoadChange = (e) => {
         let val = parseFloat(e.target.value);
         if (val === 0) val = 0.1; 
         setLoad(val);
     };
+
+    const handleBeamTypeChange = ( e ) => {
+        setBeamType( e.target.value )
+        if ( beamType === "cantilever" )
+        {
+            setLoadLocation( height / 2.0 )
+        }
+        else if ( beamType === "half-mbb" )
+        {
+            setLoadLocation( length / 2.0 )
+        }
+
+    }
 
     return (
         
@@ -95,7 +108,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                                     name="beam-type" 
                                     className="form-select beam-type-select large-control-input"
                                     value={beamType} 
-                                    onChange={(e) => setBeamType(e.target.value)} 
+                                    onChange={ ( e ) => handleBeamTypeChange( e )} 
                                 >
                                     <option value="cantilever">Cantilever</option>
                                     <option value="half-mbb">Half MBB</option>
