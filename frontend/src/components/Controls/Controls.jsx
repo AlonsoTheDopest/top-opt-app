@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
 import "./Controls.css"
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import BeamTypeInput from '../BeamTypeInput/BeamTypeInput';
+import BeamTypeInput from '../BeamTypeInput/BeamTypeInput'
+import LoadInput from '../LoadInput/LoadInput'
+import VolumeFractionInput from "../VolumeFractionInput/VolumeFractionInput"
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import LoadInput from '../LoadInput/LoadInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({ beamType, setBeamType, setSimulationImage }) {
@@ -75,12 +76,6 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
             setElapsedTime(0);
         }
     };
-    
-    // const handleLoadChange = (e) => {
-    //     let val = parseFloat(e.target.value);
-    //     if (val === 0) val = 0.1; 
-    //     setLoad(val);
-    // };
 
     return (
         
@@ -110,18 +105,12 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
 
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
-                                <label htmlFor="volume-fraction" className="form-label"><p className='lastRun'>Volume Fraction(0.1 to 0.9 with Iterations of 0.1):</p><br></br> <strong>{volumeFraction}</strong></label>
-                                <input
-                                    className="form-range"
-                                    type="range"
-                                    name="volume-fraction"
-                                    min="0.1" max="0.9" step="0.1"
-                                    value={volumeFraction}
-                                    onChange={(e) => setVolumeFraction( Number( e.target.value ) ) }
+                                <VolumeFractionInput
+                                    volumeFraction = { volumeFraction }
+                                    setVolumeFraction = { setVolumeFraction }
                                 />
                             </Col>
                         </Row>
-
                         
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
