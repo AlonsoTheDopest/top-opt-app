@@ -1,16 +1,16 @@
 import { useState, useRef } from 'react';
 import "./Controls.css"
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import BeamTypeInput from '../BeamTypeInput/BeamTypeInput'
 import LoadInput from '../LoadInput/LoadInput'
 import VolumeFractionInput from "../VolumeFractionInput/VolumeFractionInput"
 import SubmitButton from '../SubmitButton/SubmitButton';
 import { Container, Row, Col } from 'react-bootstrap';
 import IterationsInput from '../IterationsInput/IterationInput';
+import LoadLocationRatioInput from '../LoadLocationRatioInput/LoadLocationRatioInput';
 
 // 1. ADD setSimulationImage TO PROPS
-export default function Controls({ beamType, setBeamType, setSimulationImage }) {
-    
+export default function Controls({ beamType, setBeamType, setSimulationImage })
+{
     const [volumeFraction, setVolumeFraction] = useState(0.3);
     const [iterations, setIterations] = useState(500);
     const [load, setLoad] = useState(-1.0); 
@@ -18,7 +18,7 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
     const height = 20.0
     // const [ length, setLength ] = useState(60.0);
     // const [ height, setHeight ] = useState(20.0);
-    const [ loadLocation, setLoadLocation ] = useState( 10.0 );
+    const [loadLocationRatio, setLoadLocationRatio] = useState(0.5);
 
     const [isLoading, setIsLoading] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -46,7 +46,25 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
             setElapsedTime(seconds);
         }, 1000);
 
-        const topOptArgs = { beamType, volumeFraction, iterations, load, loadLocation, length, height };
+        let loadLocation
+        if ( beamType === "cantilever" )
+        {
+            loadLocation = loadLocationRatio * height
+        }
+        else if ( beamType === "half-mbb" )
+        {
+            loadLocation = loadLocationRatio * length
+        }
+
+        const topOptArgs = { 
+            beamType, 
+            volumeFraction, 
+            iterations, 
+            load, 
+            loadLocation, 
+            length, 
+            height
+        };
 
         try {
             const res = await fetch("/run-top-opt", {
@@ -89,9 +107,6 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                                 <BeamTypeInput
                                     beamType = { beamType }
                                     setBeamType = { setBeamType }
-                                    setLoadLocation = { setLoadLocation }
-                                    length = { length }
-                                    height = { height }
                                 />
                             </Col>
                         </Row>
@@ -100,6 +115,15 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                                 <LoadInput 
                                     load = { load }
                                     setLoad = { setLoad }
+                                />
+                            </Col>
+                        </Row>
+
+                        <Row className="justify-content-center ">
+                            <Col md={8} lg={6}>
+                                <LoadLocationRatioInput 
+                                    loadLocationRatio = { loadLocationRatio }
+                                    setLoadLocationRatio = { setLoadLocationRatio }
                                 />
                             </Col>
                         </Row>

@@ -15,11 +15,8 @@ export default function Output({ forceLoadValue, setForceLoadValue, beamType, si
 
     return (
         <div className="output-wrapper">
-            
             {/* --- TOP SECTION: SETUP IMAGES ONLY --- */}
             <div className="imageBodyHolder main-beam-display">
-                
-                
                 {beamType === 'cantilever' ? (
                     <Image src={CantileverPic} fluid />
                 ) : (
