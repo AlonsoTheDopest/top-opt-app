@@ -70,7 +70,7 @@ if beam_type == "cantilever"
         dirichlet_tags = ["LeftSupport"],
         dirichlet_masks =[(true,true)])
 
-else # Half-MBB
+elseif beam_type == "half-mbb"
     V0_Disp = TestFESpace(model,reffe_Disp;conformity =:H1,
         dirichlet_tags = ["LeftSupport","RightSupport"],
         dirichlet_masks =[(true,false),(false,true)])
