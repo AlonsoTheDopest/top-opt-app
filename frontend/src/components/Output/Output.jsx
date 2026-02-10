@@ -1,10 +1,9 @@
-import "./index.css"
+import "./Output.css"
 import Image from 'react-bootstrap/Image'
-import React from 'react';
-import NewPlaceholder from "../images/black.gif";
+import NewPlaceholder from "../../images/black.gif";
 
-import CantileverPic from "../images/cantilever-beam.jpg";
-import HalfMmbPic from "../images/half-mbb-beam.jpg";
+import CantileverPic from "../../images/cantilever-beam.jpg";
+import HalfMbbPic from "../../images/half-mbb-beam.jpg";
 
 export default function Output({ forceLoadValue, setForceLoadValue, beamType, simulationImage }) {
     
@@ -24,7 +23,7 @@ export default function Output({ forceLoadValue, setForceLoadValue, beamType, si
                 {beamType === 'cantilever' ? (
                     <Image src={CantileverPic} fluid />
                 ) : (
-                    <Image src={HalfMmbPic} fluid />
+                    <Image src={HalfMbbPic} fluid />
                 )}
             </div>
 
