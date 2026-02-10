@@ -5,6 +5,7 @@ import BeamTypeInput from '../BeamTypeInput/BeamTypeInput'
 import LoadInput from '../LoadInput/LoadInput'
 import VolumeFractionInput from "../VolumeFractionInput/VolumeFractionInput"
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import IterationsInput from '../IterationsInput/IterationInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({ beamType, setBeamType, setSimulationImage }) {
@@ -114,22 +115,15 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                         
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
-                                <label htmlFor="iterations" className="form-label large-control-label">Iterations:</label>
-                                <input
-                                    className="form-control large-control-input"
-                                    type="number"
-                                    name="iterations"
-                                    min="0" max="2000"
-                                    step="100"
-                                    value={iterations}
-                                    onChange={(e) => setIterations( Number( e.target.value ) )}
+                                <IterationsInput
+                                    iterations = { iterations }
+                                    setIterations = { setIterations }
                                 />
                             </Col>
                         </Row>
 
                         <Row className="justify-content-center">
                             <Col>
-                                
                                 <Button 
                                     variant="success" 
                                     size="lg" 
