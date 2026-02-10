@@ -1,5 +1,5 @@
-import "./index.css"
-import UserGuidePdf from "../images/User_Guide-Topology_Optimization.pdf";
+import "./Header.css"
+import UserGuidePdf from "../../images/User_Guide-Topology_Optimization.pdf";
 
 export default function Header() {
     return (

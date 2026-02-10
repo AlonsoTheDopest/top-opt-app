@@ -1,11 +1,11 @@
 import './App.css'
-import Header from "./Header"
-import Controls from "./Controls"
-import Output from "./Output"
+import Header from "./components/Header/Header"
+import Controls from "./components/Controls/Controls"
+import Output from "./components/Output/Output"
 
 import React, { useState } from 'react';
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col } from 'react-bootstrap';
 
 function App() {
