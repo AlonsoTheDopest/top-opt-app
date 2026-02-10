@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import "./Controls.css"
 // import 'bootstrap/dist/css/bootstrap.min.css';
+import BeamTypeInput from '../BeamTypeInput/BeamTypeInput';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 // 1. ADD setSimulationImage TO PROPS
@@ -80,18 +81,17 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
         setLoad(val);
     };
 
-    const handleBeamTypeChange = ( e ) => {
-        setBeamType( e.target.value )
-        if ( beamType === "cantilever" )
-        {
-            setLoadLocation( height / 2.0 )
-        }
-        else if ( beamType === "half-mbb" )
-        {
-            setLoadLocation( length / 2.0 )
-        }
-
-    }
+    // const handleBeamTypeChange = ( e ) => {
+    //     setBeamType( e.target.value )
+    //     if ( beamType === "cantilever" )
+    //     {
+    //         setLoadLocation( height / 2.0 )
+    //     }
+    //     else if ( beamType === "half-mbb" )
+    //     {
+    //         setLoadLocation( length / 2.0 )
+    //     }
+    // }
 
     return (
         
@@ -99,23 +99,17 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
             <footer className="d-flex">
                 <form onSubmit={handleSubmit} className="d-flex flex-grow-1">
                     <Container className="d-flex flex-column justify-content-evenly flex-grow-1 text-center py-4 fs-3">
-                        
-                        
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
-                                <label htmlFor="beam-type" className="form-label large-control-label"><p className='controlText'>Beam Type:</p></label>
-                                <select 
-                                    name="beam-type" 
-                                    className="form-select beam-type-select large-control-input"
-                                    value={beamType} 
-                                    onChange={ ( e ) => handleBeamTypeChange( e )} 
-                                >
-                                    <option value="cantilever">Cantilever</option>
-                                    <option value="half-mbb">Half MBB</option>
-                                </select>
+                                <BeamTypeInput
+                                    beamType = { beamType }
+                                    setBeamType = { setBeamType }
+                                    setLoadLocation = { setLoadLocation }
+                                    length = { length }
+                                    height = { height }
+                                />
                             </Col>
                         </Row>
-
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
                                 <label htmlFor="load" className="form-label"><p className='controlText'><p className='lastRun'>Load(-1 to 1 with Iterations of 0.1):</p> </p><strong>{load}</strong></label>
