@@ -4,7 +4,8 @@ import "./Controls.css"
 import BeamTypeInput from '../BeamTypeInput/BeamTypeInput'
 import LoadInput from '../LoadInput/LoadInput'
 import VolumeFractionInput from "../VolumeFractionInput/VolumeFractionInput"
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import SubmitButton from '../SubmitButton/SubmitButton';
+import { Container, Row, Col } from 'react-bootstrap';
 import IterationsInput from '../IterationsInput/IterationInput';
 
 // 1. ADD setSimulationImage TO PROPS
@@ -79,7 +80,6 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
     };
 
     return (
-        
         <>
             <footer className="d-flex">
                 <form onSubmit={handleSubmit} className="d-flex flex-grow-1">
@@ -124,24 +124,13 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
 
                         <Row className="justify-content-center">
                             <Col>
-                                <Button 
-                                    variant="success" 
-                                    size="lg" 
-                                    type="submit" 
-                                    disabled={isLoading}
-                                    className="large-control-button"
-                                >
-                                    {isLoading ? `Optimizing... (${elapsedTime}s)` : "Run Optimization"}
-                                </Button>
-                                
-                                <div className="timer-display" style={{ marginTop: '0.5vh'}}>
-                                    {!isLoading && lastRunTime !== null && (
-                                        <span className='lastRun'>Last run took: {lastRunTime}s</span>
-                                    )}
-                                </div>
+                                <SubmitButton
+                                    isLoading={isLoading}
+                                    elapsedTime={elapsedTime}
+                                    lastRunTime={lastRunTime}
+                                />
                             </Col>
                         </Row>
-                        
                     </Container>
                 </form>
             </footer>
