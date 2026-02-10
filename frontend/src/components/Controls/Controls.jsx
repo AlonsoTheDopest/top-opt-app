@@ -1,12 +1,14 @@
 import { useState, useRef } from 'react';
 import "./Controls.css"
-import BeamTypeInput from '../BeamTypeInput/BeamTypeInput'
-import LoadInput from '../LoadInput/LoadInput'
-import VolumeFractionInput from "../VolumeFractionInput/VolumeFractionInput"
-import SubmitButton from '../SubmitButton/SubmitButton';
+import {
+    BeamTypeInput,
+    LoadInput,
+    LoadLocationRatioInput,
+    VolumeFractionInput,
+    IterationsInput,
+    SubmitButton
+} from "../Inputs"
 import { Container, Row, Col } from 'react-bootstrap';
-import IterationsInput from '../IterationsInput/IterationInput';
-import LoadLocationRatioInput from '../LoadLocationRatioInput/LoadLocationRatioInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({ beamType, setBeamType, setSimulationImage })
