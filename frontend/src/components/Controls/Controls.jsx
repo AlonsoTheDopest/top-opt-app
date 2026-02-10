@@ -3,6 +3,7 @@ import "./Controls.css"
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import BeamTypeInput from '../BeamTypeInput/BeamTypeInput';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import LoadInput from '../LoadInput/LoadInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({ beamType, setBeamType, setSimulationImage }) {
@@ -75,23 +76,11 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
         }
     };
     
-    const handleLoadChange = (e) => {
-        let val = parseFloat(e.target.value);
-        if (val === 0) val = 0.1; 
-        setLoad(val);
-    };
-
-    // const handleBeamTypeChange = ( e ) => {
-    //     setBeamType( e.target.value )
-    //     if ( beamType === "cantilever" )
-    //     {
-    //         setLoadLocation( height / 2.0 )
-    //     }
-    //     else if ( beamType === "half-mbb" )
-    //     {
-    //         setLoadLocation( length / 2.0 )
-    //     }
-    // }
+    // const handleLoadChange = (e) => {
+    //     let val = parseFloat(e.target.value);
+    //     if (val === 0) val = 0.1; 
+    //     setLoad(val);
+    // };
 
     return (
         
@@ -112,14 +101,9 @@ export default function Controls({ beamType, setBeamType, setSimulationImage }) 
                         </Row>
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
-                                <label htmlFor="load" className="form-label"><p className='controlText'><p className='lastRun'>Load(-1 to 1 with Iterations of 0.1):</p> </p><strong>{load}</strong></label>
-                                <input
-                                    className="form-range"
-                                    type="range"
-                                    name="load"
-                                    min="-1" max="1" step="0.1"
-                                    value={load}
-                                    onChange={handleLoadChange}
+                                <LoadInput 
+                                    load = { load }
+                                    setLoad = { setLoad }
                                 />
                             </Col>
                         </Row>
