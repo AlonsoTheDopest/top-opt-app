@@ -23,3 +23,19 @@ services:
     environment:
       - GENIE_ENV=dev
       - JULIA_REVISE=on
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PORT=${DATABASE_PORT}
+  database:
+    container_name: postgres-database
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+volumes:
+  postgres_data:
