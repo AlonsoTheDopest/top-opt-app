@@ -1,5 +1,6 @@
 env: ENV["GENIE_ENV"]
-
+# TODO: Make the veriables be pulled from environment file. For some reason, the
+#       docker file doesn't seem to send the env variables to here.
 dev:
   adapter: PostgreSQL
   database: postgres
