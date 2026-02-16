@@ -1,13 +1,13 @@
 import { useState, useRef } from 'react';
-import "./Controls.css"
+import "./style.css"
 import {
     BeamTypeInput,
     LoadInput,
     LoadLocationRatioInput,
     VolumeFractionInput,
-    IterationsInput,
-    SubmitButton
-} from "../Inputs"
+    IterationsInput
+} from "./Inputs"
+import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
 
 // 1. ADD setSimulationImage TO PROPS
@@ -18,8 +18,6 @@ export default function Controls({ beamType, setBeamType, setSimulationImage })
     const [load, setLoad] = useState(-1.0); 
     const length = 60.0
     const height = 20.0
-    // const [ length, setLength ] = useState(60.0);
-    // const [ height, setHeight ] = useState(20.0);
     const [loadLocationRatio, setLoadLocationRatio] = useState(0.5);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -71,17 +69,12 @@ export default function Controls({ beamType, setBeamType, setSimulationImage })
         try {
             const res = await fetch("/run-top-opt", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(topOptArgs)
             });
 
-            // 3. PARSE THE RESPONSE FROM JULIA
             const data = await res.json();
-            
-            // 4. CHECK IF JULIA SENT AN IMAGE AND SAVE IT
-            // Assumes your Julia JSON has a key called "image" with base64 data
+
             if (data.image) {
                 setSimulationImage(data.image);
             }

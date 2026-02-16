@@ -4,7 +4,7 @@ using Gmsh: gmsh, gmsh.model.geo.addPoint, gmsh.model.geo.addLine
 
 function calculateMeshSize( length::Float64 )
     print( "Calculating mesh size\n" )
-    return length / 150.0
+    return length / 80.0
 end
 
 function createBeamMesh( length::Float64, height::Float64, beam_type::String, load_position::Float64 )

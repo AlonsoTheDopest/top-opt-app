@@ -1,4 +1,4 @@
-import "./Header.css"
+import "./style.css"
 import UserGuidePdf from "../../images/User_Guide-Topology_Optimization.pdf";
 
 export default function Header() {
@@ -14,9 +14,14 @@ export default function Header() {
             
             <div className="Guide_Section">
                 <a 
-                    href={UserGuidePdf} 
-                    download="User_Guide-Topology_Optimization.pdf" 
-                    style={{ cursor: 'pointer', textDecoration: 'underline', color: 'rgb(255 255 204)'}}
+                    href={UserGuidePdf}
+                    target={"_blank"}
+                    rel={"noreferrer"}
+                    style={{ 
+                        cursor: 'pointer', 
+                        textDecoration: 'underline', 
+                        color: 'rgb(255 255 204)'
+                    }}
                 >
                     The Concept
                 </a>

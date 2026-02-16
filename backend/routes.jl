@@ -1,55 +1,72 @@
 using Genie.Router, Base64
 using Genie.Renderer.Json: json
+include("app/resources/results/Results.jl")
+using .Results:Result
+
+function get_encoded_image(image_path::String, image_type::String = "png")
+    encoded_image = ""
+    if isfile(image_path)
+        read_image = read(image_path)
+        encoded_image = base64encode(read_image)
+        encoded_image = "data:image/$image_type;base64,$encoded_image"
+    end
+    return encoded_image
+end
+
+function get_results()
+    results = all(Result)
+    return json(results)
+end
+
 # route("/") do
 #   serve_static_file("welcome.html")
 # end
 
+route("/results", method = GET) do
+    return get_results()
+end
+
 route( "/run-top-opt", method = POST ) do
     top_opt_args = params(:JSON_PAYLOAD)
 
-    println( top_opt_args )
+    length = Float64(top_opt_args["length"])
+    height = Float64(top_opt_args["height"])
+    beam_type = String(top_opt_args["beamType"])
+    load = Float64(top_opt_args["load"])
+    volume_fraction = Float64(top_opt_args["volumeFraction"])
+    iterations = Integer(top_opt_args["iterations"])
+    load_location = Float64(top_opt_args["loadLocation"])
 
-    length = Float64( top_opt_args["length"] )
-    height = Float64( top_opt_args["height"] )
-    beam_type = String( top_opt_args["beamType"] )
-    load = Float64( top_opt_args["load"] )
-    volume_fraction = Float64( top_opt_args["volumeFraction"] )
-    iterations = Integer( top_opt_args["iterations"] )
-    load_position = Float64( top_opt_args["loadLocation"] )
+    image_path = topology_optimization_driver( 
+        length, 
+        height, 
+        beam_type, 
+        load, 
+        volume_fraction, 
+        iterations, 
+        load_location
+    )
 
-    topology_optimization_driver( length, 
-                                  height, 
-                                  beam_type, 
-                                  load, 
-                                  volume_fraction, 
-                                  iterations, 
-                                  load_position )
+    encoded_image = get_encoded_image(image_path)
+    
+    if encoded_image != ""
+        result = Result(
+            beam_type=beam_type,
+            load=load,
+            load_location=load_location,
+            volume_fraction=volume_fraction,
+            iterations=iterations,
+            image=encoded_image
+        ) |> save!
 
-    image_path = "result.png"
-    encoded_image = ""
-
-    # Check if the image was actually created
-    if isfile(image_path)
-        # 1. Open the file and encode it to Base64 text
-        open(image_path) do file
-            encoded_image = base64encode(read(file))
-        end
-
-        # 2. Add the browser prefix so React knows it's an image
-        image_data_string = "data:image/png;base64,$(encoded_image)"
-
-        # 3. Return the JSON response with the image data
         return json(Dict(
             "status" => "success",
-            "image" => image_data_string  # <--- This is the key part!
+            "image" => encoded_image
         ))
     else
-        # Error handling if the image wasn't found
         return json(Dict(
             "status" => "error",
             "message" => "Image file not generated."
         ))
     end
-
-    println( "\n\n\nEnd Program" )
 end 

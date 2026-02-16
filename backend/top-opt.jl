@@ -281,4 +281,7 @@ Colorbar(fig[1,2], plt)
 ax.aspect = AxisAspect(3)
 ax.title = "Optimized Design"
 limits!(ax, 0, 60, 0, 20)
-save("result.png", fig)
+mkpath("./result-images")
+epoch = string(round(Int, time()))
+result_image_path = "./result-images/result_$epoch.png"
+CairoMakie.save(result_image_path, fig)
