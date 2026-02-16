@@ -29,3 +29,4 @@ yarn-error.log*
 build/
 node_modules/
 .env
+result-images
