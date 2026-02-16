@@ -1,7 +1,7 @@
 import './App.css'
-import Header from "./components/Header/Header"
-import Controls from "./components/Controls/Controls"
-import Output from "./components/Output/Output"
+import Header from "./components/Header"
+import Controls from "./components/Controls"
+import Output from "./components/Output"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import { useState, useEffect } from 'react';
 
@@ -10,7 +10,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 function MainMenu()
 {
-  const [forceLoadValue, setForceLoadValue] = useState(0);
   const [beamType, setBeamType] = useState('cantilever');
 
   // 1. NEW STATE: Holds the result image from the server
@@ -20,11 +19,8 @@ function MainMenu()
       <Header />
       <Row>
         <Col>
-          <Output 
-            forceLoadValue={forceLoadValue} 
-            setForceLoadValue={setForceLoadValue} 
+          <Output
             beamType={beamType}
-            // 2. PASS THE IMAGE DATA TO OUTPUT
             simulationImage={simulationImage}
           /> 
         </Col>
@@ -32,7 +28,6 @@ function MainMenu()
           <Controls 
             beamType={beamType} 
             setBeamType={setBeamType} 
-            // 3. PASS THE SETTER TO CONTROLS
             setSimulationImage={setSimulationImage}
           />
         </Col>

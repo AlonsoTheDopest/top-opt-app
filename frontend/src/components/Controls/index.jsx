@@ -1,13 +1,13 @@
 import { useState, useRef } from 'react';
-import "./Controls.css"
+import "./style.css"
 import {
     BeamTypeInput,
     LoadInput,
     LoadLocationRatioInput,
     VolumeFractionInput,
-    IterationsInput,
-    SubmitButton
-} from "../Inputs"
+    IterationsInput
+} from "./Inputs"
+import SubmitButton from "./SubmitButton/SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
 
 // 1. ADD setSimulationImage TO PROPS
@@ -18,8 +18,6 @@ export default function Controls({ beamType, setBeamType, setSimulationImage })
     const [load, setLoad] = useState(-1.0); 
     const length = 60.0
     const height = 20.0
-    // const [ length, setLength ] = useState(60.0);
-    // const [ height, setHeight ] = useState(20.0);
     const [loadLocationRatio, setLoadLocationRatio] = useState(0.5);
 
     const [isLoading, setIsLoading] = useState(false);

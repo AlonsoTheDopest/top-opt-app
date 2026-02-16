@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap"
 
-export default function SubmitButton({ isLoading, elapsedTime, lastRunTime })
+export default function SubmitButton({isLoading, elapsedTime, lastRunTime})
 {
     return (
         <>
