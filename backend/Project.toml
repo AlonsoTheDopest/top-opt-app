@@ -19,6 +19,7 @@ Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
 NLopt = "76087f3c-5699-56af-9a33-bf431cd00edd"
 SearchLight = "340e8cb6-72eb-11e8-37ce-c97ebeb32050"
 SearchLightPostgreSQL = "4327cdd6-4902-11ea-0272-430cea0431bd"
+SearchLightSQLite = "21a827c4-482a-11ea-3a19-4d2243a4a2c5"
 Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
 [compat]
@@ -37,4 +38,5 @@ Logging = "1.11.0"
 NLopt = "1.2.1"
 SearchLight = "2.11.2"
 SearchLightPostgreSQL = "2.4.0"
+SearchLightSQLite = "2.2.2"
 Zygote = "0.7.10"
