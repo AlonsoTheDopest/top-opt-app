@@ -7,7 +7,7 @@ import {
     VolumeFractionInput,
     IterationsInput
 } from "./Inputs"
-import SubmitButton from "./SubmitButton/SubmitButton"
+import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
 
 // 1. ADD setSimulationImage TO PROPS
