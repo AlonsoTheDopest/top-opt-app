@@ -28,7 +28,7 @@ export default function Output({ forceLoadValue, setForceLoadValue, beamType, si
             <div className="imageBodyHolder banner-display">
                 
                 
-                <div className="force-load-top-middle">
+                {/* <div className="force-load-top-middle">
                     <label className="form-label">
                         <p>Load Location: <strong>{forceLoadValue}</strong></p>
                     </label>
@@ -41,7 +41,7 @@ export default function Output({ forceLoadValue, setForceLoadValue, beamType, si
                         value={forceLoadValue}
                         onChange={handleRangeChange}
                     />
-                </div>
+                </div> */}
 
                 
                 <Image 
