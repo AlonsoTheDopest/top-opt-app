@@ -69,17 +69,12 @@ export default function Controls({ beamType, setBeamType, setSimulationImage })
         try {
             const res = await fetch("/run-top-opt", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(topOptArgs)
             });
 
-            // 3. PARSE THE RESPONSE FROM JULIA
             const data = await res.json();
-            
-            // 4. CHECK IF JULIA SENT AN IMAGE AND SAVE IT
-            // Assumes your Julia JSON has a key called "image" with base64 data
+
             if (data.image) {
                 setSimulationImage(data.image);
             }
