@@ -9,10 +9,10 @@ function up()
       columns([
         :beam_type => :string,
         :load => :float,
-        :load_location_ratio => :float,
+        :load_location => :float,
         :volume_fraction => :float,
         :iterations => :integer,
-        :image_path => :string
+        :image => :string
       ])
     ]
   end

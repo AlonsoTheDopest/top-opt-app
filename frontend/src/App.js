@@ -2,7 +2,7 @@ import './App.css'
 import Header from "./components/Header/Header"
 import Controls from "./components/Controls/Controls"
 import Output from "./components/Output/Output"
-import {BrowserRouter, Routes, Route, Link} from "react-router-dom"
+import {BrowserRouter, Routes, Route} from "react-router-dom"
 import { useState, useEffect } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -57,13 +57,18 @@ function Results()
   return (
     <>
       <h1>Optimization Results</h1>
-      {results.map((r) => (
+      {results.map((result) => (
         <>
-        <p>Beam Type: {r.beam_type}</p>
-        <p>Load: {r.load}</p>
-        <p>Volume Fraction: {r.volume_fraction}</p>
-        <p>Iterations: {r.iterations}</p>
-        <img src={r.image} style={{maxWidth: "400px"}}/>
+          <p>Beam Type: {result.beam_type}</p>
+          <p>Load: {result.load}</p>
+          <p>Load Location: {result.load_location}</p>
+          <p>Volume Fraction: {result.volume_fraction}</p>
+          <p>Iterations: {result.iterations}</p>
+          <img 
+            src={result.image} 
+            alt={"Optimized beam"}
+            style={{maxWidth: "400px"}}
+          />
         </>
       ))}
     </>

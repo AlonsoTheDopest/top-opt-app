@@ -26,24 +26,6 @@ export default function Output({ forceLoadValue, setForceLoadValue, beamType, si
 
             {/* --- BOTTOM SECTION: RESULT/LOADING + SLIDER --- */}
             <div className="imageBodyHolder banner-display">
-                
-                
-                {/* <div className="force-load-top-middle">
-                    <label className="form-label">
-                        <p>Load Location: <strong>{forceLoadValue}</strong></p>
-                    </label>
-                    <input
-                        type="range"
-                        className="form-range force-load-slider horizontal"
-                        min="0"
-                        max="1"
-                        step="0.1"
-                        value={forceLoadValue}
-                        onChange={handleRangeChange}
-                    />
-                </div> */}
-
-                
                 <Image 
                     src={simulationImage ? simulationImage : NewPlaceholder} 
                     fluid 
