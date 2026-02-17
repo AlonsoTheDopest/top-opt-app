@@ -8,17 +8,15 @@ export default function LoadLocationInput({
     height
 })
 {
-    let min;
-    let max;
+    const min = 0
+    let max
     const divisions = 10.0
     let positionVariable
 
     if (beamType === "cantilever") {
-        min = 0
         max = height
         positionVariable = "h"
     } else {
-        min = length / divisions
         max = length
         positionVariable = "l"
     }
