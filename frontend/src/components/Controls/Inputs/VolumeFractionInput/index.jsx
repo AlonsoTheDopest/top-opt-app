@@ -3,14 +3,22 @@ export default function VolumeFractionInput({
     setVolumeFraction
 })
 {
+    const min = 0.1
+    const max = 0.9
+    const step = 0.1
     return (
         <>
-            <label htmlFor="volume-fraction" className="form-label"><p className='lastRun'>Volume Fraction(0.1 to 0.9 with Iterations of 0.1):</p><br></br> <strong>{volumeFraction}</strong></label>
+            <label htmlFor="volume-fraction" className="form-label">
+                <p className='lastRun'>
+                    Volume Fraction &isin; [{min}, {max}], &Delta;={step}:
+                </p>
+                <strong>{volumeFraction}</strong>
+            </label>
             <input
                 className="form-range"
                 type="range"
                 name="volume-fraction"
-                min="0.1" max="0.9" step="0.1"
+                min={min} max={max} step={step}
                 value={volumeFraction}
                 onChange={(e) => setVolumeFraction( Number( e.target.value ) ) }
             />
