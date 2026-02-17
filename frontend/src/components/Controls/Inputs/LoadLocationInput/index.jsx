@@ -11,13 +11,16 @@ export default function LoadLocationInput({
     let min;
     let max;
     const divisions = 10.0
+    let positionVariable
 
     if (beamType === "cantilever") {
         min = 0
         max = height
+        positionVariable = "h"
     } else {
         min = length / divisions
         max = length
+        positionVariable = "l"
     }
     const step = max / divisions
 
@@ -36,7 +39,7 @@ export default function LoadLocationInput({
         <>
             <label htmlFor="load-location" className="form-label">
                 <p className='controlText lastRun'>
-                    Load Location &isin; [{min}, {max}], &Delta;={step}:
+                    Load Location ({positionVariable}) &isin; [{min}, {max}], &Delta;={step}:
                 </p>
                 <strong>{loadLocation}</strong>
             </label>
