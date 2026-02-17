@@ -1,5 +1,3 @@
-# cantilever-top-opt.jl
-
 # FEA 
 using  Gridap
 using  Gridap.Geometry
@@ -15,7 +13,13 @@ using  LinearAlgebra
 
 # Gardient calculation 
 using  ChainRulesCore, Zygote
-import ChainRulesCore: rrule 
+import ChainRulesCore: rrule
+
+#SGD
+using  Random
+using  Distributions
+using Statistics
+
 
 # For MMA 
 using  NLopt 
@@ -23,11 +27,16 @@ using  NLopt
 # For plotting 
 using CairoMakie, GridapMakie 
 
+using StatsFuns
+using Roots
+using Plots
+
 const  E_mat = 1.0
 const  ν_mat = 0.3 
+const  ηe = 1e-15
 const  penal = 3
 
-model = GmshDiscreteModel("./mesh.msh"); 
+model = GmshDiscreteModel("./mesh.msh")
 
 function  ElasFourthOrderConstTensor(E,ν,PlanarState)
     # 1 for  Plane  Stress  and 2 Plane  Strain  Condition
@@ -56,17 +65,22 @@ function σfun(ε)
 end 
 
 function Em(p)
-    Em = p ^ penal
+    Em = (ηe + (1-ηe)*(p ^ penal))
     return Em
 end 
 
-const  C_mat = ElasFourthOrderConstTensor(E_mat ,ν_mat ,1);
+const C_mat = ElasFourthOrderConstTensor(E_mat ,ν_mat ,1)
 
 order = 1
 reffe_Disp = ReferenceFE(lagrangian ,VectorValue{2,Float64},order)
+reffe_adj = ReferenceFE(lagrangian ,VectorValue{2,Float64},order)
 
-if beam_type == "cantilever"
+if beam_type =="cantilever"
     V0_Disp = TestFESpace(model,reffe_Disp;conformity =:H1,
+        dirichlet_tags = ["LeftSupport"],
+        dirichlet_masks =[(true,true)])
+
+    w0_Disp = TestFESpace(model,reffe_adj;conformity =:H1,
         dirichlet_tags = ["LeftSupport"],
         dirichlet_masks =[(true,true)])
 
@@ -74,9 +88,15 @@ elseif beam_type == "half-mbb"
     V0_Disp = TestFESpace(model,reffe_Disp;conformity =:H1,
         dirichlet_tags = ["LeftSupport","RightSupport"],
         dirichlet_masks =[(true,false),(false,true)])
+
+    w0_Disp = TestFESpace(model,reffe_adj;conformity =:H1,
+        dirichlet_tags = ["LeftSupport","RightSupport"],
+        dirichlet_masks =[(true,false),(false,true)])
 end
+
 uh = zero(V0_Disp)
-U0_Disp = V0_Disp 
+U_Disp = V0_Disp
+U0_Disp = w0_Disp
 
 degree = 2*order
 Ω= Triangulation(model)
@@ -95,38 +115,26 @@ np = num_free_dofs(P)
 
 pf_reffe = ReferenceFE(lagrangian, Float64, 1)
 Qf = TestFESpace(Ω, pf_reffe, vector_type = Vector{Float64})
-Pf = Qf 
+sr = num_free_dofs(Qf)
+Pf = Qf
+npf = num_free_dofs(Pf) 
 
-fem_params = (;V0_Disp, U0_Disp, Q, P, Qf, Pf, np, Ω, dΩ, n_Γ_Load, dΓ_Load) 
 
-A_Disp(u,v,pth) =  ((p->Em(p))∘pth) * (ε(v) ⊙ (σfun∘(ε(u))))
-function MatrixA(pth; fem_params)
-    A_mat = assemble_matrix(fem_params.U0_Disp, fem_params.V0_Disp) do u, v
-        ∫(A_Disp(u,v,pth))fem_params.dΩ
-    end
-    return lu(A_mat)
-end
+fem_params = (;V0_Disp, Q, P, Qf, Pf, np, Ω, dΩ, n_Γ_Load, dΓ_Load) 
 
-function  stepDisp(fem_params,pth)
+
+function  stepDisp(fem_params,pth,f)
     A_Disp(u,v,pth) = ((p->Em(p))∘pth) * ε(v) ⊙ (σfun∘(ε(u)))
     a_Disp(u,v) = ∫(A_Disp(u,v,pth))fem_params.dΩ
-    b_Disp(v) = ∫(v ⋅ f)fem_params.dΓ_Load
-    op_Disp = AffineFEOperator(a_Disp ,b_Disp ,fem_params.U0_Disp ,fem_params.V0_Disp)
-    uh_out = solve(op_Disp)
-    return  get_free_dof_values(uh_out)
+    b_Disp(v) = ∫(v ⋅ (-f))fem_params.dΓ_Load
+    op_Disp = AffineFEOperator(a_Disp ,b_Disp ,U_Disp ,fem_params.V0_Disp)
+    uh_out = Gridap.solve(op_Disp)    
 end 
 
-function MatrixOf(fem_params)
-
-    return assemble_matrix(fem_params.U0_Disp, fem_params.V0_Disp) do u, v
-             0.5*∫((∇(u))' ⊙ (C_mat ⊙ ∇(v)))fem_params.dΩ
-    end
-end
-
-elemsize = 0.75
-r = (3*elemsize)/(2*sqrt(3)) #0.025           # Filter radius
-β = 4                       # β∈[1,∞], threshold sharpness
-η = 0.5                     # η∈[0,1], threshold center
+# elemsize = 0.4
+r = elemsize/sqrt(3) #0.025           # Filter radius
+β = 4                      # β∈[1,∞], threshold sharpness
+η = 0.5                     # η, threshold center
 
 a_f(r, u, v) = r^2 * (∇(v) ⋅ ∇(u))
 
@@ -135,7 +143,7 @@ function Filter(p0; r, fem_params)
     op = AffineFEOperator(fem_params.Pf, fem_params.Qf) do u, v
         ∫(a_f(r, u, v))fem_params.dΩ + ∫(v * u)fem_params.dΩ, ∫(v * ph)fem_params.dΩ
       end
-    pfh = solve(op)
+    pfh = Gridap.solve(op)
     return get_free_dof_values(pfh)
 end
 
@@ -150,43 +158,59 @@ Dptdpf(pf, β, η) = β * (1.0 - tanh(β * (pf - η))^2) / (tanh(β * η) + tanh
 DEdpf(pf, β, η)= penal * ((Threshold(pf; β, η)) ^ (penal-1)) * Dptdpf(pf, β, η) # Gradient of density^penal
 DAdpf(u, v, pfh; β, η) = ((p->DEdpf(p, β, η)) ∘ pfh) * (ε(v) ⊙ (σfun∘(ε(u)))); 
 
-# Comment/Uncomment for FEA Analysis 
-p0 = ones(fem_params.np)
-pf_vec = Filter(p0;r, fem_params)
-pfh = FEFunction(fem_params.Pf, pf_vec)
-pth = (pf -> Threshold(pf; β, η)) ∘ pfh
-A_mat = MatrixA(pth; fem_params)
-u_vec = stepDisp(fem_params,pth)
-uh = FEFunction(fem_params.U0_Disp, u_vec)
-
-function gf_pf(pf_vec; β, η, fem_params)
-    pfh = FEFunction(fem_params.Pf, pf_vec)
-    pth = (pf -> Threshold(pf; β, η)) ∘ pfh
-    u_vec = stepDisp(fem_params,pth)
-    K_mat = MatrixOf(fem_params)
-    u_vec' * K_mat * u_vec
-end 
-
-function rrule(::typeof(gf_pf), pf_vec; β, η, fem_params)
-    function U_Disp_pullback(dg)
-      NO_FIELDS, dg * Dgfdpf(pf_vec; β, η, fem_params) 
-    end
-    gf_pf(pf_vec; β, η, fem_params), U_Disp_pullback
+function jfun(ε_in)
+    σ_elas = C_mat⊙ε_in
+    oσ = 0.5*(ε_in⊙σ_elas)
+    return  oσ
 end
 
-function Dgfdpf(pf_vec; β, η, fem_params)
+
+function djfunu(ε,ε_in)
+    σ_elas = C_mat⊙ε_in
+    duσ = 0.5*((ε⊙σ_elas))
+    return  duσ
+end
+
+function  wu(fem_params,pth,uh)
+    
+    druduvFn(u,v,pth) = (((p->Em(p))∘pth) * (ε(v) ⊙ (σfun∘(ε(u)))))
+    druduv(u,v) = ∫(druduvFn(u,v,pth))fem_params.dΩ
+    djfunuh(v,pth,uh) = (((p->Em(p))∘pth) * (djfunu∘(ε(v),ε(uh))))
+    djfunuf(v) = ∫(djfunuh(v,pth,uh))fem_params.dΩ
+    w_Disp = AffineFEOperator(druduv ,djfunuf ,U0_Disp ,w0_Disp)
+    w_out = Gridap.solve(w_Disp)
+    return  w_out
+end
+
+function gf_pf(pf_vec;iteration_counter, β, η, fem_params)
     pfh = FEFunction(fem_params.Pf, pf_vec)
     pth = (pf -> Threshold(pf; β, η)) ∘ pfh
-    A_mat = MatrixA(pth; fem_params)
-    u_vec = stepDisp(fem_params,pth)
-    O_mat = MatrixOf(fem_params)
-    uh = FEFunction(fem_params.U0_Disp, u_vec)
-    w_vec =  A_mat' \ (O_mat * u_vec)
-    wconjh = FEFunction(fem_params.U0_Disp, w_vec)
-    l_temp(dp) = ∫(-2*DAdpf(wconjh,uh, pfh; β, η) * dp)fem_params.dΩ
-    dgfdpf = assemble_vector(l_temp, fem_params.Pf)
+        uh = stepDisp(fem_params,pth,f)
+        objf = sum(∫( ( ((p->Em(p))∘pth) * (jfun∘(ε(uh))) ) )fem_params.dΩ)
 
-    return dgfdpf
+    
+    
+    return objf
+end 
+
+function rrule(::typeof(gf_pf), pf_vec; iteration_counter,β, η, fem_params)
+    function U_Disp_pullback(dg)
+      NO_FIELDS, dg * Dgfdpf(pf_vec; iteration_counter,β, η, fem_params) 
+    end
+    gf_pf(pf_vec;iteration_counter, β, η, fem_params), U_Disp_pullback
+end
+
+function Dgfdpf(pf_vec; iteration_counter,β, η, fem_params)
+    pfh = FEFunction(fem_params.Pf, pf_vec)
+    pth = (pf -> Threshold(pf; β, η)) ∘ pfh
+
+    uh = stepDisp(fem_params,pth,f)
+
+    wconjh = wu(fem_params,pth,uh)
+    
+    l_temp(dp) = ∫(-1*DAdpf(wconjh,uh, pfh; β, η) * dp)fem_params.dΩ
+    dgfdpfl = assemble_vector(l_temp, fem_params.Pf)
+    return dgfdpfl
 end 
 
 function pf_p0(p0; r, fem_params)
@@ -211,22 +235,21 @@ function Dgdp(dgdpf; r, fem_params)
     return assemble_vector(l_temp, fem_params.P)
 end 
 
-function gf_p(p0::Vector; r, β, η, fem_params)
+
+function gf_p(p0::Vector;iteration_counter, r, β, η, fem_params)
     pf_vec = pf_p0(p0; r, fem_params)
-    gf_pf(pf_vec; β, η, fem_params)
+    gf_pf(pf_vec;iteration_counter, β, η, fem_params)
 end
 
-function gf_p(p0::Vector, grad::Vector; r, β, η, fem_params)
+function gf_p(p0::Vector, grad::Vector;iteration_counter, r, β, η, fem_params)
     if length(grad) > 0
-        dgdp, = Zygote.gradient(p -> gf_p(p; r, β, η, fem_params), p0)
+        
+        dgdp, = Zygote.gradient(p -> gf_p(p; iteration_counter,r, β, η, fem_params), p0)
         grad[:] = dgdp
     end
-    gvalue = gf_p(p0::Vector; r, β, η, fem_params)
-    open("gvaluemma.txt", "a") do io
-        write(io, "$gvalue \n")
-    end
+    gvalue = gf_p(p0::Vector; iteration_counter,r, β, η, fem_params)
     gvalue
-end; 
+end
 
 dv=get_array(∫(1)fem_params.dΩ)
 getpoints = get_cell_points(Ω)
@@ -240,17 +263,29 @@ function cf_p(p0::Vector, gradc::Vector; r, β, η, fem_params)
     pfh = FEFunction(fem_params.Pf, pf_vec)
     pth = (pf -> Threshold(pf; β, η)) ∘ pfh
     pthxtr = evaluate(pfh⊙dv,getpoints)
+    vcv = sum(pthxtr)[1] - volfrac*sum(dv)
     return sum(pthxtr)[1] - volfrac*sum(dv)
-end; 
+end
 
 function gf_p_optimize(p_init; r, β, η, TOL=1e-4, MAX_ITER, fem_params)
+# function gf_p_optimize(p_init; r, β, η, MAX_ITER, fem_params)
     ##################### Optimize #################
     opt = Opt(:LD_MMA, fem_params.np)
     opt.lower_bounds = 0.001
     opt.upper_bounds = 1
     opt.xtol_rel = TOL
     opt.maxeval = MAX_ITER
-    opt.min_objective = (p0, grad) -> gf_p(p0, grad; r, β, η, fem_params)
+    iteration_counter = 0 
+    iteration_solutions = Any[] 
+    function objective_fn(p0, grad)
+        iteration_counter += 1 
+        push!(iteration_solutions, p0) 
+        pf_vec = pf_p0(iteration_solutions[iteration_counter]; r, fem_params)
+        pfh = FEFunction(fem_params.Pf, pf_vec)
+        pth = (pf -> Threshold(pf; β, η)) ∘ pfh
+        return gf_p(p0, grad;iteration_counter, r, β, η, fem_params)
+    end
+    opt.min_objective = (p0, grad) -> objective_fn(p0, grad)
     inequality_constraint!(opt, (p0, gradc) -> cf_p(p0, gradc; r, β, η, fem_params), 1e-8)
     (g_opt, p_opt, ret) = optimize(opt, p_init)
     return g_opt, p_opt
@@ -258,16 +293,17 @@ function gf_p_optimize(p_init; r, β, η, TOL=1e-4, MAX_ITER, fem_params)
 end
 
 grad = zeros(fem_params.np)
-
+gradpf = zeros(fem_params.np)
 p_opt = fill(volfrac, fem_params.np)   # Uniform Initial guess
 g_opt = 0
 
-TOL = 1e-5 # tolerance of the MMA 
+TOL = 1e-10 # tolerance of the MMA 
 
-g_opt, p_opt = gf_p_optimize(p_opt; r, β, η, TOL, MAX_ITER, fem_params);
+g_opt, p_temp_opt = gf_p_optimize(p_opt; r, β, η, TOL,MAX_ITER, fem_params);
 
+global p_opt = p_temp_opt
 
-βpost=64
+βpost=4
 function Thresholdp(pfh; βpost, η)
     return ((tanh(βpost * η) + tanh(βpost * (pfh - η))) / (tanh(βpost * η) + tanh(βpost * (1.0 - η)))) 
 end 
@@ -276,10 +312,10 @@ pf_vec = pf_p0(p_opt; r, fem_params)
 pfh = FEFunction(fem_params.Pf, pf_vec)
 pth = (pf -> Thresholdp(pf; βpost, η)) ∘ pfh; 
 
-fig, ax, plt = plot(fem_params.Ω, pth, colormap = :binary)
+fig, ax, plt = CairoMakie.plot(fem_params.Ω, pth, colormap = :binary)
 Colorbar(fig[1,2], plt)
 ax.aspect = AxisAspect(3)
-ax.title = "Optimized Design"
+ax.title = "Optimized Design LDT Load Uncertain"
 limits!(ax, 0, 60, 0, 20)
 mkpath("./result-images")
 epoch = string(round(Int, time()))
