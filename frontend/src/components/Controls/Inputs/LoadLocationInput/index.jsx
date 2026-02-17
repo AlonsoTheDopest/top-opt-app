@@ -36,7 +36,7 @@ export default function LoadLocationInput({
         <>
             <label htmlFor="load-location" className="form-label">
                 <p className='controlText lastRun'>
-                    Load Location Ratio &isin; [{min}, {max}], &Delta;={step}:
+                    Load Location &isin; [{min}, {max}], &Delta;={step}:
                 </p>
                 <strong>{loadLocation}</strong>
             </label>
