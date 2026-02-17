@@ -3,7 +3,7 @@ import "./style.css"
 import {
     BeamTypeInput,
     LoadInput,
-    LoadLocationRatioInput,
+    LoadLocationInput,
     VolumeFractionInput,
     IterationsInput
 } from "./Inputs"
@@ -11,14 +11,18 @@ import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
 
 // 1. ADD setSimulationImage TO PROPS
-export default function Controls({ beamType, setBeamType, setSimulationImage })
+export default function Controls({
+    beamType, 
+    setBeamType, 
+    setSimulationImage
+})
 {
     const [volumeFraction, setVolumeFraction] = useState(0.3);
     const [iterations, setIterations] = useState(500);
     const [load, setLoad] = useState(-1.0); 
     const length = 60.0
     const height = 20.0
-    const [loadLocationRatio, setLoadLocationRatio] = useState(0.5);
+    const [loadLocation, setLoadLocation] = useState(height / 2.0);
 
     const [isLoading, setIsLoading] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -45,16 +49,6 @@ export default function Controls({ beamType, setBeamType, setSimulationImage })
             const seconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
             setElapsedTime(seconds);
         }, 1000);
-
-        let loadLocation
-        if ( beamType === "cantilever" )
-        {
-            loadLocation = loadLocationRatio * height
-        }
-        else if ( beamType === "half-mbb" )
-        {
-            loadLocation = loadLocationRatio * length
-        }
 
         const topOptArgs = { 
             beamType, 
@@ -116,9 +110,12 @@ export default function Controls({ beamType, setBeamType, setSimulationImage })
 
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
-                                <LoadLocationRatioInput 
-                                    loadLocationRatio = { loadLocationRatio }
-                                    setLoadLocationRatio = { setLoadLocationRatio }
+                                <LoadLocationInput 
+                                    loadLocation = { loadLocation }
+                                    setLoadLocation = { setLoadLocation }
+                                    beamType={beamType}
+                                    length={length}
+                                    height={height}
                                 />
                             </Col>
                         </Row>

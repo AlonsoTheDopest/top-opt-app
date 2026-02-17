@@ -1,8 +1,8 @@
 import {useEffect} from "react"
 
-export default function LoadLocationRatioInput({
-    loadLocationRatio,
-    setLoadLocationRatio,
+export default function LoadLocationInput({
+    loadLocation,
+    setLoadLocation,
     beamType,
     length,
     height
@@ -24,24 +24,24 @@ export default function LoadLocationRatioInput({
     useEffect(() => {
         if (beamType === "cantilever")
         {
-            setLoadLocationRatio(height / 2.0);
+            setLoadLocation(height / 2.0);
         } 
         else if( beamType === "half-mbb")
         {
-            setLoadLocationRatio(length / 2.0);
+            setLoadLocation(length / 2.0);
         }
-    }, [beamType, length, height, setLoadLocationRatio]);
+    }, [beamType, length, height, setLoadLocation]);
 
     return (
         <>
-            <label htmlFor="load-location" className="form-label"><p className='controlText lastRun'>Load Location Ratio &isin; [{minLoadLocation}, {maxLoadLocation}]:</p><strong>{loadLocationRatio}</strong></label>
+            <label htmlFor="load-location" className="form-label"><p className='controlText lastRun'>Load Location Ratio &isin; [{minLoadLocation}, {maxLoadLocation}]:</p><strong>{loadLocation}</strong></label>
             <input
                 className="form-range"
                 type="range"
                 name="load"
                 min={minLoadLocation} max={maxLoadLocation} step={loadLocationStep}
-                value={loadLocationRatio}
-                onChange={(e)=>setLoadLocationRatio(e.target.value)}
+                value={loadLocation}
+                onChange={(e)=>setLoadLocation(e.target.value)}
             />
         </>
     )
