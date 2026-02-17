@@ -115,7 +115,7 @@ function addLoadLinePoints( length::Float64,
     if beam_type == "cantilever"
         loadLinePt1, loadLinePt2 = addCantileverPoints( length, height, mesh_size, load_position )
         
-    else # Half-MBB
+    elseif beam_type == "half-mbb"
         loadLinePt1, loadLinePt2 = addHalfMbbPoints( length, height, mesh_size, load_position )
     end
 
@@ -157,13 +157,13 @@ function addCantileverPoints( length::Float64, height::Float64, mesh_size, load_
     rightSideTopPtHeight = load_position + offset
     rightSideBottomPtHeight = load_position - offset
 
-    if rightSideTopPtHeight > height
-        rightSideTopPtHeight = height
-        rightSideBottomPtHeight = height - 2.0 * offset
+    if rightSideTopPtHeight >= height
+        rightSideTopPtHeight = height - offset
+        rightSideBottomPtHeight = rightSideTopPtHeight - 2.0 * offset
 
-    elseif rightSideBottomPtHeight < 0.0
-        rightSideTopPtHeight = 2.0 * offset
-        rightSideBottomPtHeight = 0.0
+    elseif rightSideBottomPtHeight <= 0.0
+        rightSideBottomPtHeight = offset
+        rightSideTopPtHeight = rightSideBottomPtHeight + 2.0 * offset
     end
 
     rightSideTopPt = addPoint( length, rightSideTopPtHeight, 0.0, mesh_size )
@@ -178,13 +178,13 @@ function addHalfMbbPoints( length::Float64, height::Float64, mesh_size, load_pos
     topSideLeftPtLength = load_position - offset
     topSideRightPtLength = load_position + offset
 
-    if topSideLeftPtLength < 0.0
-        topSideLeftPtLength = 0.0
-        topSideRightPtLength = 2.0 * offset
+    if topSideLeftPtLength <= 0.0
+        topSideLeftPtLength = offset
+        topSideRightPtLength = topSideLeftPtLength + 2.0 * offset
 
-    elseif topSideRightPtLength > length
-        topSideRightPtLength = length
-        topSideLeftPtLength = length - 2.0 * offset
+    elseif topSideRightPtLength >= length
+        topSideRightPtLength = length - offset
+        topSideLeftPtLength = topSideLeftPtLength - 2.0 * offset
     end
 
     topSideLeftPt = addPoint( topSideLeftPtLength, height, 0.0, mesh_size )

@@ -18,7 +18,7 @@ export default function Controls({
 })
 {
     const [volumeFraction, setVolumeFraction] = useState(0.3);
-    const [iterations, setIterations] = useState(500);
+    const [iterations, setIterations] = useState(50);
     const [load, setLoad] = useState(-1.0); 
     const length = 60.0
     const height = 20.0
