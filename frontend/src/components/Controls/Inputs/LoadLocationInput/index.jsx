@@ -8,18 +8,18 @@ export default function LoadLocationInput({
     height
 })
 {
-    let minLoadLocation;
-    let maxLoadLocation;
+    let min;
+    let max;
     const divisions = 10.0
 
     if (beamType === "cantilever") {
-        minLoadLocation = 0
-        maxLoadLocation = height
+        min = 0
+        max = height
     } else {
-        minLoadLocation = length / divisions
-        maxLoadLocation = length
+        min = length / divisions
+        max = length
     }
-    const loadLocationStep = maxLoadLocation / divisions
+    const step = max / divisions
 
     useEffect(() => {
         if (beamType === "cantilever")
@@ -34,14 +34,19 @@ export default function LoadLocationInput({
 
     return (
         <>
-            <label htmlFor="load-location" className="form-label"><p className='controlText lastRun'>Load Location Ratio &isin; [{minLoadLocation}, {maxLoadLocation}]:</p><strong>{loadLocation}</strong></label>
+            <label htmlFor="load-location" className="form-label">
+                <p className='controlText lastRun'>
+                    Load Location Ratio &isin; [{min}, {max}], &Delta;={step}:
+                </p>
+                <strong>{loadLocation}</strong>
+            </label>
             <input
                 className="form-range"
                 type="range"
                 name="load"
-                min={minLoadLocation} max={maxLoadLocation} step={loadLocationStep}
+                min={min} max={max} step={step}
                 value={loadLocation}
-                onChange={(e)=>setLoadLocation(e.target.value)}
+                onChange={(e)=>setLoadLocation(Number(e.target.value))}
             />
         </>
     )

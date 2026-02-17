@@ -1,17 +1,19 @@
 export default function IterationsInput({ iterations, setIterations })
 {
-    const iterationsStep = 50
-    const minIterations = iterationsStep
-    const maxIterations = 500
+    const step = 50
+    const min = step
+    const max = 500
     return (
         <>
-            <label htmlFor="iterations" className="form-label large-control-label">Iterations &isin; [{minIterations}, {maxIterations}]:</label>
+            <label htmlFor="iterations" className="form-label large-control-label">
+                Iterations &isin; [{min}, {max}], &Delta;={step}:
+            </label>
             <input
                 className="form-control large-control-input"
                 type="number"
                 name="iterations"
-                min={minIterations} max={maxIterations}
-                step={iterationsStep}
+                min={min} max={max}
+                step={step}
                 value={iterations}
                 onChange={(e) => setIterations( Number( e.target.value ) )}
             />
