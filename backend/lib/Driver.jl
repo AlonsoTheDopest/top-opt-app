@@ -13,13 +13,14 @@ function topology_optimization_driver( length::Float64,
                                        load_position::Float64 )
     createBeamMesh( length, height, beamtype, load_position )
 
-    global f, volfrac, MAX_ITER, beam_type, result_image_path
+    global f, volfrac, MAX_ITER, beam_type, result_image_path, elemsize
 
-    f = VectorValue( 0.0, load )
+    f = VectorValue(0.0, load)
     volfrac = volumefraction
     MAX_ITER = iterations
     beam_type = beamtype
     result_image_path = ""
+    elemsize = calculateMeshSize(length)
 
     include( "./top-opt.jl" )
 

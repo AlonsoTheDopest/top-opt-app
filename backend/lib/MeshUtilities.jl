@@ -2,25 +2,20 @@
 
 using Gmsh: gmsh, gmsh.model.geo.addPoint, gmsh.model.geo.addLine
 
-function calculateMeshSize( length::Float64 )
-    print( "Calculating mesh size\n" )
-    return length / 80.0
+function calculateMeshSize(length::Float64)
+    return length / 160.0
 end
 
 function createBeamMesh( length::Float64, height::Float64, beam_type::String, load_position::Float64 )
-
     gmsh.initialize()
     if gmsh.isInitialized() == 1
-        println( "Gmsh initialized successfully." )
-        gmsh.option.setNumber( "Mesh.Algorithm", 6 ) # Frontal-Delaunay for 2D
-        createBeam( length, height, beam_type, load_position )
-        gmsh.model.mesh.generate( 2 )
-        gmsh.write( "./mesh.msh" )
+        gmsh.option.setNumber("Mesh.Algorithm", 6) # Frontal-Delaunay for 2D
+        createBeam(length, height, beam_type, load_position)
+        gmsh.model.mesh.generate(2)
+        gmsh.write("./mesh.msh")
         gmsh.finalize()
-
         return "./mesh.msh"
     end
-
     return ""
 end
 
