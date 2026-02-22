@@ -20,8 +20,8 @@ export default function Controls({
     const [volumeFraction, setVolumeFraction] = useState(0.3);
     const [iterations, setIterations] = useState(50);
     const [load, setLoad] = useState(-1.0); 
-    const length = 60.0
-    const height = 20.0
+    const [length, setLength] = useState(60.0)
+    const [height, setHeight] = useState(20.0)
     const [loadLocation, setLoadLocation] = useState(height / 2.0);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -99,6 +99,11 @@ export default function Controls({
                                 />
                             </Col>
                         </Row>
+                        {beamType === "general" ? (
+                            <p>Placeholder</p>
+                        ):(
+                            <></>
+                        )}
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
                                 <LoadInput 
@@ -107,7 +112,7 @@ export default function Controls({
                                 />
                             </Col>
                         </Row>
-
+                        
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
                                 <LoadLocationInput 
