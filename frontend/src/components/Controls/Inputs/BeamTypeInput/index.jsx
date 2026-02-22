@@ -1,5 +1,10 @@
 export default function BeamTypeInput({ beamType, setBeamType })
 {
+    const BEAM_TYPES = [
+        {type: "Cantilever", value: "cantilever"},
+        {type: "Half MBB", value: "half-mbb"},
+        {type: "General", value: ""},
+    ]
     return (
         <>
             <label htmlFor="beam-type" className="form-label large-control-label">
@@ -9,10 +14,11 @@ export default function BeamTypeInput({ beamType, setBeamType })
                 name="beam-type" 
                 className="form-select beam-type-select large-control-input"
                 value={beamType} 
-                onChange={ ( e ) => setBeamType( e.target.value )} 
+                onChange={ e => setBeamType(e.target.value)} 
             >
-                <option value="cantilever">Cantilever</option>
-                <option value="half-mbb">Half MBB</option>
+                {BEAM_TYPES.map(item => (
+                    <option value={item.value}>{item.type}</option>
+                ))}
             </select>
         </>
     )
