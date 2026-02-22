@@ -1,11 +1,19 @@
+import {useEffect} from "react"
+
 export default function LengthInput({
     length,
-    setLength
+    setLength,
+    beamType
 })
 {
     const min = 0;
     const max = 60;
     const step = 2;
+
+    useEffect(() => {
+        setLength(60.0)
+    }, [beamType]);
+    
     return (
         <>
             <label htmlFor="length" className="form-label large-control-label">

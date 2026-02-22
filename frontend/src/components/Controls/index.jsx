@@ -108,6 +108,7 @@ export default function Controls({
                                         <LengthInput
                                             length={length}
                                             setLength={setLength}
+                                            beamType={beamType}
                                         />
                                     </Col>
                                 </Row>
@@ -116,6 +117,7 @@ export default function Controls({
                                         <HeightInput
                                             height={height}
                                             setHeight={setHeight}
+                                            beamType={beamType}
                                         />
                                     </Col>
                                 </Row>
