@@ -9,6 +9,8 @@ import {
 } from "./Inputs"
 import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
+import LengthInput from './LengthInput';
+import HeightInput from './HeightInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({
@@ -100,8 +102,25 @@ export default function Controls({
                             </Col>
                         </Row>
                         {beamType === "general" ? (
-                            <p>Placeholder</p>
-                        ):(
+                            <>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <LengthInput
+                                            length={length}
+                                            setLength={setLength}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <HeightInput
+                                            height={height}
+                                            setHeight={setHeight}
+                                        />
+                                    </Col>
+                                </Row>
+                            </>
+                        ) : (
                             <></>
                         )}
                         <Row className="justify-content-center ">
