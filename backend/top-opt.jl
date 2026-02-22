@@ -315,9 +315,10 @@ pth = (pf -> Thresholdp(pf; βpost, η)) ∘ pfh;
 
 fig, ax, plt = CairoMakie.plot(fem_params.Ω, pth, colormap = :binary)
 Colorbar(fig[1,2], plt)
-ax.aspect = AxisAspect(3)
+ax.aspect = AxisAspect(l / h)
+# ax.aspect = DataAspect()
 ax.title = "Optimized Design"
-limits!(ax, 0, 60, 0, 20)
+limits!(ax, 0, l, 0, h)
 mkpath("./result-images")
 epoch = string(round(Int, time()))
 result_image_path = "./result-images/result_$epoch.png"
