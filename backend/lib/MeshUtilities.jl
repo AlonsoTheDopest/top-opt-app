@@ -37,7 +37,7 @@ function addPhysicalGroups( linesVec, area, beam_type::String )
     domainPhysGroup = gmsh.model.addPhysicalGroup( 2, [ area ] )
     gmsh.model.setPhysicalName( 2, domainPhysGroup, "Domain" )
 
-    if beam_type == "cantilever"
+    if beam_type == "cantilever" || beam_type == "general"
         loadLine = linesVec[ 3 ]
         leftLine = linesVec[ end ]
 
@@ -92,7 +92,7 @@ end
 function assemblePtsVec( cornerPtsVec, loadLinePtsVec, beam_type::String )
     ptsVec = []
 
-    if beam_type == "cantilever"
+    if beam_type == "cantilever" || beam_type == "general"
         append!( ptsVec, cornerPtsVec[ 1 : 2 ] )
         append!( ptsVec, loadLinePtsVec )
         append!( ptsVec, cornerPtsVec[ 3 : 4 ] )
@@ -112,7 +112,7 @@ function addLoadLinePoints( length::Float64,
                             beam_type::String, 
                             mesh_size::Float64,
                             load_position::Float64 )
-    if beam_type == "cantilever"
+    if beam_type == "cantilever" || beam_type == "general"
         loadLinePt1, loadLinePt2 = addCantileverPoints( length, height, mesh_size, load_position )
         
     elseif beam_type == "half-mbb"
