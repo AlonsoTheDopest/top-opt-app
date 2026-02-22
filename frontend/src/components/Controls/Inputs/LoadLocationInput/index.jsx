@@ -23,7 +23,7 @@ export default function LoadLocationInput({
     const step = max / divisions
 
     useEffect(() => {
-        if (beamType === "cantilever")
+        if (beamType === "cantilever" && beamType === "general")
         {
             setLoadLocation(height / 2.0);
         } 
