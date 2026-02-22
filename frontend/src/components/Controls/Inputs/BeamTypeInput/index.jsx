@@ -5,6 +5,7 @@ export default function BeamTypeInput({ beamType, setBeamType })
         {type: "Half MBB", value: "half-mbb"},
         {type: "General", value: "general"},
     ]
+
     return (
         <>
             <label 
