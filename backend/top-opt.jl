@@ -75,7 +75,7 @@ order = 1
 reffe_Disp = ReferenceFE(lagrangian ,VectorValue{2,Float64},order)
 reffe_adj = ReferenceFE(lagrangian ,VectorValue{2,Float64},order)
 
-if beam_type =="cantilever"
+if beam_type =="cantilever" || beam_type == "general"
     V0_Disp = TestFESpace(model,reffe_Disp;conformity =:H1,
         dirichlet_tags = ["LeftSupport"],
         dirichlet_masks =[(true,true)])
@@ -92,6 +92,7 @@ elseif beam_type == "half-mbb"
     w0_Disp = TestFESpace(model,reffe_adj;conformity =:H1,
         dirichlet_tags = ["LeftSupport","RightSupport"],
         dirichlet_masks =[(true,false),(false,true)])
+
 end
 
 uh = zero(V0_Disp)
