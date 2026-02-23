@@ -10,8 +10,8 @@ export default function LoadLocationInput({
 {
     const min = 0
     let max
-    const divisions = 10.0
     let positionVariable
+    const step = 1;
 
     if (loadEdge === "right" || loadEdge === "left")
     {
@@ -24,8 +24,6 @@ export default function LoadLocationInput({
         max = length
         positionVariable = "x"
     }
-
-    const step = max / divisions
 
     useEffect(() => {
         if (loadEdge === "right" || loadEdge === "left")
