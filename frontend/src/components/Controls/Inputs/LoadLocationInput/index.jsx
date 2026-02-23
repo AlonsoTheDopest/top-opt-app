@@ -18,11 +18,13 @@ export default function LoadLocationInput({
         max = height
         positionVariable = "h"
     } 
+    
     else if (loadEdge === "top" || loadEdge === "bottom")
     {
         max = length
         positionVariable = "l"
     }
+
     const step = max / divisions
 
     useEffect(() => {

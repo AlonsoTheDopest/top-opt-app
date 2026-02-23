@@ -75,6 +75,7 @@ export default function Controls({
             beamType, 
             volumeFraction, 
             iterations, 
+            loadEdge,
             load, 
             loadLocation, 
             length, 
