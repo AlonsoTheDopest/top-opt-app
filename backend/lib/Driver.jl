@@ -12,14 +12,16 @@ function topology_optimization_driver(
     load::Float64, 
     volumefraction::Float64, 
     iterations::Integer,
-    load_position::Float64
+    load_position::Float64,
+    boundaries,
+    masks
 )
     createBeamMesh(length, height, beamtype, load_edge, load_position)
 
     # TODO: If anyone is brave enough to refactor the top-opt.jl file as
     #       function calls, instead of making these variables globals, go crazy.
     #       Time wasted: 25 hrs
-    global f, volfrac, MAX_ITER, beam_type, result_image_path, elemsize, l, h
+    global f, volfrac, MAX_ITER, beam_type, result_image_path, elemsize, l, h, direchlet_masks, direchlet_tags
 
     f = VectorValue(0.0, load)
     volfrac = volumefraction
@@ -29,6 +31,8 @@ function topology_optimization_driver(
     elemsize = calculateMeshSize(length)
     l = length;
     h = height;
+    direchlet_tags = boundaries
+    direchlet_masks = masks
 
     include( "./top-opt.jl" )
 
