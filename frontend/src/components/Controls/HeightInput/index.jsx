@@ -6,9 +6,9 @@ export default function HeightInput({
     beamType
 })
 {
-    const min = 0;
-    const max = 20;
-    const step = 2;
+    const min = 1;
+    const max = 60;
+    const step = 1;
 
     useEffect(() => {
         setHeight(20.0)
