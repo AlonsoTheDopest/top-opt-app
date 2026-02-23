@@ -1,10 +1,5 @@
-import {useState} from "react"
+import {useState, useEffect} from "react"
 
-const SUPPORT_TYPES = [
-    "Fixed",
-    "Pin",
-    "Roller"
-]
 const SIDES = [
     "TopSide",
     "BottomSide",
@@ -23,64 +18,50 @@ export default function BoundaryConditionInput({
     setBoundaryConditions
 })
 {
-    // const [boundaryConditions, setBoundaryConditions] = useState([]);
-
-    const [supportType, setSupportType] = useState("Fixed");
     const [boundary, setBoundary] = useState("TopSide")
+    const [dofFlags, setDofFlags] = useState([true, true])
     
 
     const handleClick = () => {
-        let dof_flags;
-        if (supportType == "Fixed" || supportType == "Pin")
-        {
-            dof_flags = [true, true]
-        }
-
-        else // Roller
-        {
-            if (boundary.includes("Corner"))
-            {
-                dof_flags = [false, true]
-            }
-
-            else // Side
-            {
-                if (boundary.includes("Top") && boundary.includes("Bottom"))
-                {
-                    dof_flags = [false, true]
-                }
-
-                else
-                {
-                    dof_flags = [true, false]
-                }
-            }
-        }
         setBoundaryConditions([
             ...boundaryConditions,
             {
                 boundary,
-                dof_flags
+                dofFlags
             }
         ])
     }
+
+    useEffect(() => {
+        if (!dofFlags[0] && !dofFlags[1])
+        {
+            setDofFlags([true, true])
+        }
+    }, [dofFlags])
 
     return (
         <>
             <label>
                 <p>Boundary Condition(s):</p>
             </label>
-            <select 
-                value={supportType}
-                onChange={e => setSupportType(e.target.value)}
-            >
-                {SUPPORT_TYPES.map(item =>(
-                    <option value={item}>{item}</option>
-                ))}
-            </select>
+            <label>Fix x</label>
+            <input 
+                type="checkbox"
+                checked={dofFlags[0]}
+                onChange={e => setDofFlags([e.target.checked, dofFlags[1]])}
+                
+            ></input>
+
+            <label>Fix y</label>
+            <input 
+                type="checkbox"
+                checked={dofFlags[1]}
+                onChange={e => setDofFlags([dofFlags[0], e.target.checked])}
+            ></input>
             <select 
                 value={boundary}
                 onChange={e => setBoundary(e.target.value)}
+                
             >
                 {SIDES.map(item => (
                     <option value={item}>{item}</option>
