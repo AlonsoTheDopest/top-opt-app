@@ -5,6 +5,7 @@ using Gmsh: gmsh, gmsh.model.geo.addPoint, gmsh.model.geo.addLine
 const ZERO_DIM = 0;
 const ONE_DIM = 1;
 const TWO_DIM = 2;
+const OFFSET = 0.1
 
 function calculateMeshSize(length::Float64)
     return length / 160.0
@@ -41,40 +42,139 @@ function createBeam(
     ptsVec = addPoints(length, height, load_edge, load_position)
     linesVec = addLines(ptsVec)
     area = addArea(linesVec)
-    addPhysicalGroups(ptsVec, linesVec, area, beam_type)
+    addPhysicalGroups(ptsVec, linesVec, area, beam_type, length, height);
 end
 
 
-function addPhysicalGroups(ptsVec, linesVec, area, beam_type::String)
+function isBottomLeftCorner(x, y)
+    return x == 0.0 && y == 0.0
+end
+
+function isBottomRightCorner(x, y, length)
+    return x == length && y == 0.0
+end
+
+function isTopRightCorner(x, y, length, height)
+    return x == length && y == height
+end
+
+
+function isTopLeftCorner(x, y, height)
+    return x == 0.0 && y == height
+end
+
+
+function getPointPhysicalGroupName(x, y, length, height)
+    physical_group_name = ""
+    if isBottomLeftCorner(x, y)
+        physical_group_name = "BottomLeftCorner"
+
+    elseif isBottomRightCorner(x, y, length)
+        physical_group_name = "BottomRightCorner"
+
+    elseif isTopRightCorner(x, y, length, height)
+        physical_group_name = "TopRightCorner"
+
+    else # Top Left corner
+        physical_group_name = "TopLeftCorner"
+    end
+
+    return physical_group_name
+end
+
+
+function addPointsPhysicalGroups(length, height)
+    pts = gmsh.model.getEntities(ZERO_DIM)
+    for (dim, tag) in pts
+        x, y, z = gmsh.model.getValue(dim, tag, [])
+        println("Point $tag: ($x, $y, $z)")
+        if (x == 0.0 || x == length) && (y == 0.0 || y == height)
+            physical_group_name = getPointPhysicalGroupName(x, y, length, height);
+            physical_group = gmsh.model.addPhysicalGroup(ZERO_DIM, [tag])
+            gmsh.model.setPhysicalName(ZERO_DIM, physical_group, physical_group_name)
+        end
+    end
+end
+
+
+function isTopSide(x1, y1, x2, y2, length, height)
+    return isTopRightCorner(x1, y1, length, height) && isTopLeftCorner(x2, y2, height);
+end
+
+
+function isBottomSide(x1, y1, x2, y2, length)
+    return isBottomLeftCorner(x1, y1) && isBottomRightCorner(x2, y2, length);
+end
+
+
+function isRightSide(x1, y1, x2, y2, length, height)
+    return isBottomRightCorner(x1, y1, length) && isTopRightCorner(x2, y2, length, height);
+end
+
+
+function isLeftSide(x1, y1, x2, y2, height)
+    return isTopLeftCorner(x1, y1, height) && isBottomLeftCorner(x2, y2);
+end
+
+
+function isLoadLine(x1, y1, x2, y2)
+    return abs(x1 - x2) ≈ 2 * OFFSET || abs(y1 - y2) ≈ 2 * OFFSET
+end
+
+
+function getLinePhysicalGroupName(x1, y1, x2, y2, length, height)
+    physical_group_name = ""
+    if isTopSide(x1, y1, x2, y2, length, height)
+        println("Has top")
+        physical_group_name = "TopSide"
+
+    elseif isBottomSide(x1, y1, x2, y2, length)
+        println("Has bottom")
+        physical_group_name = "BottomSide"
+
+    elseif isRightSide(x1, y1, x2, y2, length, height)
+        println("Has right")
+        physical_group_name = "RightSide"
+
+    elseif isLeftSide(x1, y1, x2, y2, height)
+        println("Has left")
+        physical_group_name = "LeftSide"
+
+    elseif isLoadLine(x1, y1, x2, y2)
+        println("Has load line")
+        physical_group_name = "LoadLine"
+    end
+
+    return physical_group_name
+end
+
+
+function addLinesPhysicalGroups(length, height)
+    lines = gmsh.model.getEntities(ONE_DIM)
+    for (dim, tag) in lines
+        x1, y1, z1, x2, y2, z2 = gmsh.model.getBoundingBox(dim, tag)
+        println("Line $tag: ($x1, $y1) to ($x2, $y2)")
+        physical_group_name = getLinePhysicalGroupName(x1, y1, x2, y2, length, height)
+        if physical_group_name == ""
+            physical_group_name = getLinePhysicalGroupName(x2, y2, x1, y1, length, height)
+        end
+
+        if physical_group_name != ""
+            physical_group = gmsh.model.addPhysicalGroup(dim, [tag])
+            gmsh.model.setPhysicalName(dim, physical_group, physical_group_name)
+        end
+    end
+end
+
+
+function addPhysicalGroups(ptsVec, linesVec, area, beam_type::String, length, height)
     gmsh.model.geo.synchronize()
 
-    domainPhysGroup = gmsh.model.addPhysicalGroup(TWO_DIM, [area])
-    gmsh.model.setPhysicalName(TWO_DIM, domainPhysGroup, "Domain")
+    domainPhysGroup = gmsh.model.addPhysicalGroup(TWO_DIM, [area]);
+    gmsh.model.setPhysicalName(TWO_DIM, domainPhysGroup, "Domain");
 
-    if beam_type == "cantilever" || beam_type == "general"
-        loadLine = linesVec[3]
-        leftLine = linesVec[end]
-
-        loadLinePhysGroup = gmsh.model.addPhysicalGroup(ONE_DIM, [loadLine])
-        gmsh.model.setPhysicalName(ONE_DIM, loadLinePhysGroup, "LoadLine")
-
-        leftSupportPhysGroup = gmsh.model.addPhysicalGroup(ONE_DIM, [leftLine])
-        gmsh.model.setPhysicalName(ONE_DIM, leftSupportPhysGroup, "LeftSupport")
-
-    else # Half-MBB
-        bottom_right_pt = ptsVec[2]
-        loadLine = linesVec[4]
-        leftLine = linesVec[end]
-
-        rightSupportPhysGroup = gmsh.model.addPhysicalGroup(ZERO_DIM, [bottom_right_pt])
-        gmsh.model.setPhysicalName(ZERO_DIM, rightSupportPhysGroup, "RightSupport")
-
-        loadLinePhysGroup = gmsh.model.addPhysicalGroup(ONE_DIM, [loadLine])
-        gmsh.model.setPhysicalName(ONE_DIM, loadLinePhysGroup, "LoadLine")
-
-        leftSupportPhysGroup = gmsh.model.addPhysicalGroup(ONE_DIM, [leftLine])
-        gmsh.model.setPhysicalName(ONE_DIM, leftSupportPhysGroup, "LeftSupport")
-    end
+    addPointsPhysicalGroups(length, height);
+    addLinesPhysicalGroups(length, height);
 end
 
 function addArea(linesVec)
