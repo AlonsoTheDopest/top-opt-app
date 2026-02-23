@@ -23,6 +23,7 @@ route("/results", method = GET) do
 end
 
 route( "/run-top-opt", method = POST ) do
+
     top_opt_args = params(:JSON_PAYLOAD)
 
     length = Float64(top_opt_args["length"])
@@ -33,6 +34,19 @@ route( "/run-top-opt", method = POST ) do
     volume_fraction = Float64(top_opt_args["volumeFraction"])
     iterations = Integer(top_opt_args["iterations"])
     load_location = Float64(top_opt_args["loadLocation"])
+    boundary_conditions = top_opt_args["boundaryConditions"]
+
+    boundaries = String[]
+    masks = Tuple{Bool,Bool}[]
+
+    for obj in boundary_conditions
+        push!(boundaries, obj["boundary"])
+        flags = obj["dof_flags"]
+        push!(masks, (flags[1], flags[2]))
+    end
+
+    println(boundaries)
+    println(masks)  
 
     image_path = topology_optimization_driver( 
         length, 
@@ -42,7 +56,9 @@ route( "/run-top-opt", method = POST ) do
         load, 
         volume_fraction, 
         iterations, 
-        load_location
+        load_location,
+        boundaries,
+        masks
     )
 
     encoded_image = get_encoded_image(image_path)
