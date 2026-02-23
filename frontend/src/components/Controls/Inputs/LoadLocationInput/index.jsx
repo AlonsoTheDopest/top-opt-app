@@ -3,9 +3,9 @@ import {useEffect} from "react"
 export default function LoadLocationInput({
     loadLocation,
     setLoadLocation,
-    beamType,
     length,
-    height
+    height,
+    loadEdge
 })
 {
     const min = 0
@@ -13,25 +13,28 @@ export default function LoadLocationInput({
     const divisions = 10.0
     let positionVariable
 
-    if (beamType === "cantilever") {
+    if (loadEdge === "right" || loadEdge === "left")
+    {
         max = height
         positionVariable = "h"
-    } else {
+    } 
+    else if (loadEdge === "top" || loadEdge === "bottom")
+    {
         max = length
         positionVariable = "l"
     }
     const step = max / divisions
 
     useEffect(() => {
-        if (beamType === "cantilever" && beamType === "general")
+        if (loadEdge === "right" || loadEdge === "left")
         {
             setLoadLocation(height / 2.0);
         } 
-        else if( beamType === "half-mbb")
+        else if(loadEdge === "top" || loadEdge === "bottom")
         {
             setLoadLocation(length / 2.0);
         }
-    }, [beamType, length, height, setLoadLocation]);
+    }, [loadEdge]);
 
     return (
         <>
