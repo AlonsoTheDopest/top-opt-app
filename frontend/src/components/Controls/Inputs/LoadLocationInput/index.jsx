@@ -16,13 +16,13 @@ export default function LoadLocationInput({
     if (loadEdge === "right" || loadEdge === "left")
     {
         max = height
-        positionVariable = "h"
+        positionVariable = "y"
     } 
     
     else if (loadEdge === "top" || loadEdge === "bottom")
     {
         max = length
-        positionVariable = "l"
+        positionVariable = "x"
     }
 
     const step = max / divisions
@@ -36,7 +36,7 @@ export default function LoadLocationInput({
         {
             setLoadLocation(length / 2.0);
         }
-    }, [loadEdge]);
+    }, [loadEdge, setLoadLocation, height, length]);
 
     return (
         <>
