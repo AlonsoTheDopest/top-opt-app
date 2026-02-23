@@ -18,7 +18,9 @@ import BoundaryConditionInput from './BoundaryConditionInput';
 export default function Controls({
     beamType, 
     setBeamType, 
-    setSimulationImage
+    setSimulationImage,
+    loadEdge,
+    setLoadEdge
 })
 {
     const [volumeFraction, setVolumeFraction] = useState(0.3);
@@ -27,7 +29,7 @@ export default function Controls({
     const [length, setLength] = useState(60.0)
     const [height, setHeight] = useState(20.0)
     const [loadLocation, setLoadLocation] = useState(height / 2.0);
-    const [loadEdge, setLoadEdge] = useState("right")
+    // const [loadEdge, setLoadEdge] = useState("right")
     const [boundaryConditions, setBoundaryConditions] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +53,7 @@ export default function Controls({
         {
             setLoadEdge("top")
         }
-    }, [beamType])
+    }, [beamType, setLoadEdge])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
