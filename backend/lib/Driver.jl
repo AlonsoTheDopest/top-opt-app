@@ -4,15 +4,21 @@ using Gridap.TensorValues
 
 export topology_optimization_driver
 
-function topology_optimization_driver( length::Float64, 
-                                       height::Float64, 
-                                       beamtype::String, 
-                                       load::Float64, 
-                                       volumefraction::Float64, 
-                                       iterations::Integer,
-                                       load_position::Float64 )
-    createBeamMesh( length, height, beamtype, load_position )
+function topology_optimization_driver( 
+    length::Float64, 
+    height::Float64, 
+    beamtype::String, 
+    load_edge::String,
+    load::Float64, 
+    volumefraction::Float64, 
+    iterations::Integer,
+    load_position::Float64
+)
+    createBeamMesh(length, height, beamtype, load_edge, load_position)
 
+    # TODO: If anyone is brave enough to refactor the top-opt.jl file as
+    #       function calls, instead of making these variables globals, go crazy.
+    #       Time wasted: 25 hrs
     global f, volfrac, MAX_ITER, beam_type, result_image_path, elemsize, l, h
 
     f = VectorValue(0.0, load)
@@ -26,6 +32,5 @@ function topology_optimization_driver( length::Float64,
 
     include( "./top-opt.jl" )
 
-    println( "\n\n\nEnd Program" )
     return result_image_path
 end

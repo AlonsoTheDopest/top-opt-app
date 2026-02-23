@@ -28,6 +28,7 @@ route( "/run-top-opt", method = POST ) do
     length = Float64(top_opt_args["length"])
     height = Float64(top_opt_args["height"])
     beam_type = String(top_opt_args["beamType"])
+    load_edge = String(top_opt_args["loadEdge"])
     load = Float64(top_opt_args["load"])
     volume_fraction = Float64(top_opt_args["volumeFraction"])
     iterations = Integer(top_opt_args["iterations"])
@@ -37,6 +38,7 @@ route( "/run-top-opt", method = POST ) do
         length, 
         height, 
         beam_type, 
+        load_edge,
         load, 
         volume_fraction, 
         iterations, 
