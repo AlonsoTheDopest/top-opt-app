@@ -12,7 +12,7 @@ export default function LengthInput({
 
     useEffect(() => {
         setLength(60.0)
-    }, [beamType]);
+    }, [beamType, setLength]);
     
     return (
         <>

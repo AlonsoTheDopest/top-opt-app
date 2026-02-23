@@ -12,7 +12,7 @@ export default function HeightInput({
 
     useEffect(() => {
         setHeight(20.0)
-    }, [beamType]);
+    }, [beamType, setHeight]);
 
     return (
         <>
