@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import {useState, useRef, useEffect} from 'react';
 import "./style.css"
 import {
     BeamTypeInput,
@@ -9,6 +9,10 @@ import {
 } from "./Inputs"
 import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
+import LengthInput from './LengthInput';
+import HeightInput from './HeightInput';
+import LoadEdgeInput from './LoadEdgeInput';
+import BoundaryConditionInput from './BoundaryConditionInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({
@@ -20,15 +24,34 @@ export default function Controls({
     const [volumeFraction, setVolumeFraction] = useState(0.3);
     const [iterations, setIterations] = useState(50);
     const [load, setLoad] = useState(-1.0); 
-    const length = 60.0
-    const height = 20.0
+    const [length, setLength] = useState(60.0)
+    const [height, setHeight] = useState(20.0)
     const [loadLocation, setLoadLocation] = useState(height / 2.0);
+    const [loadEdge, setLoadEdge] = useState("right")
+    const [boundaryConditions, setBoundaryConditions] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [lastRunTime, setLastRunTime] = useState(null);
     const intervalRef = useRef(null);
     const startTimeRef = useRef(null);
+
+    useEffect(() => {
+        if (beamType === "cantilever" )
+        {
+            setLoadEdge("right")
+        }
+
+        else if (beamType === "half-mbb")
+        {
+            setLoadEdge("top")
+        }
+
+        else if (beamType === "general")
+        {
+            setLoadEdge("top")
+        }
+    }, [beamType])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -54,10 +77,12 @@ export default function Controls({
             beamType, 
             volumeFraction, 
             iterations, 
+            loadEdge,
             load, 
             loadLocation, 
             length, 
-            height
+            height,
+            boundaryConditions
         };
 
         try {
@@ -94,11 +119,51 @@ export default function Controls({
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
                                 <BeamTypeInput
-                                    beamType = { beamType }
-                                    setBeamType = { setBeamType }
+                                    beamType = {beamType}
+                                    setBeamType = {setBeamType}
                                 />
                             </Col>
                         </Row>
+                        {beamType === "general" ? (
+                            <>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <LengthInput
+                                            length={length}
+                                            setLength={setLength}
+                                            beamType={beamType}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <HeightInput
+                                            height={height}
+                                            setHeight={setHeight}
+                                            beamType={beamType}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <BoundaryConditionInput
+                                            boundaryConditions={boundaryConditions}
+                                            setBoundaryConditions={setBoundaryConditions}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <LoadEdgeInput
+                                            loadEdge={loadEdge}
+                                            setLoadEdge={setLoadEdge}
+                                        />
+                                    </Col>
+                                </Row>
+                            </>
+                        ) : (
+                            <></>
+                        )}
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
                                 <LoadInput 
@@ -107,15 +172,15 @@ export default function Controls({
                                 />
                             </Col>
                         </Row>
-
+                        
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
                                 <LoadLocationInput 
                                     loadLocation = { loadLocation }
                                     setLoadLocation = { setLoadLocation }
-                                    beamType={beamType}
                                     length={length}
                                     height={height}
+                                    loadEdge={loadEdge}
                                 />
                             </Col>
                         </Row>
