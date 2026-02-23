@@ -12,6 +12,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import LengthInput from './LengthInput';
 import HeightInput from './HeightInput';
 import LoadEdgeInput from './LoadEdgeInput';
+import BoundaryConditionInput from './BoundaryConditionInput';
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({
@@ -27,6 +28,7 @@ export default function Controls({
     const [height, setHeight] = useState(20.0)
     const [loadLocation, setLoadLocation] = useState(height / 2.0);
     const [loadEdge, setLoadEdge] = useState("right")
+    const [boundaryConditions, setBoundaryConditions] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -79,7 +81,8 @@ export default function Controls({
             load, 
             loadLocation, 
             length, 
-            height
+            height,
+            boundaryConditions
         };
 
         try {
@@ -116,8 +119,8 @@ export default function Controls({
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
                                 <BeamTypeInput
-                                    beamType = { beamType }
-                                    setBeamType = { setBeamType }
+                                    beamType = {beamType}
+                                    setBeamType = {setBeamType}
                                 />
                             </Col>
                         </Row>
@@ -138,6 +141,14 @@ export default function Controls({
                                             height={height}
                                             setHeight={setHeight}
                                             beamType={beamType}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <BoundaryConditionInput
+                                            boundaryConditions={boundaryConditions}
+                                            setBoundaryConditions={setBoundaryConditions}
                                         />
                                     </Col>
                                 </Row>
