@@ -22,7 +22,7 @@ function createBeamMesh(
     gmsh.initialize()
     if gmsh.isInitialized() == 1
         gmsh.option.setNumber("Mesh.Algorithm", 6)
-        createBeam(length, height, beam_type, load_edge, load_position)
+        createBeam(length, height, load_edge, load_position)
         gmsh.model.mesh.generate(TWO_DIM)
         gmsh.write("./mesh.msh")
         gmsh.finalize()
@@ -35,14 +35,13 @@ end
 function createBeam(
     length::Float64,
     height::Float64,
-    beam_type::String,
     load_edge::String,
     load_position::Float64
 )
     ptsVec = addPoints(length, height, load_edge, load_position)
     linesVec = addLines(ptsVec)
     area = addArea(linesVec)
-    addPhysicalGroups(ptsVec, linesVec, area, beam_type, length, height);
+    addPhysicalGroups(area, length, height);
 end
 
 
@@ -167,7 +166,7 @@ function addLinesPhysicalGroups(length, height)
 end
 
 
-function addPhysicalGroups(ptsVec, linesVec, area, beam_type::String, length, height)
+function addPhysicalGroups(area, length, height)
     gmsh.model.geo.synchronize()
 
     domainPhysGroup = gmsh.model.addPhysicalGroup(TWO_DIM, [area]);
@@ -267,14 +266,24 @@ function addLoadLinePoints(
     if load_edge == "right" || load_edge == "left"
         bottom_pt_position, top_pt_position = getLoadLinePointPositions(load_position, height)
 
-        load_line_pt1 = addPoint(length, bottom_pt_position, 0.0, mesh_size)
-        load_line_pt2 = addPoint(length, top_pt_position, 0.0, mesh_size)
+        if load_edge == "right"
+            load_line_pt1 = addPoint(length, bottom_pt_position, 0.0, mesh_size)
+            load_line_pt2 = addPoint(length, top_pt_position, 0.0, mesh_size)
+        else
+            load_line_pt1 = addPoint(0.0, bottom_pt_position, 0.0, mesh_size)
+            load_line_pt2 = addPoint(0.0, top_pt_position, 0.0, mesh_size)
+        end
         
     elseif load_edge == "top" || load_edge == "bottom"
         left_pt_position, right_pt_position = getLoadLinePointPositions(load_position, length)
 
-        load_line_pt1 = addPoint(left_pt_position, height, 0.0, mesh_size)
-        load_line_pt2 = addPoint(right_pt_position, height, 0.0, mesh_size)
+        if load_edge == "top"
+            load_line_pt1 = addPoint(left_pt_position, height, 0.0, mesh_size)
+            load_line_pt2 = addPoint(right_pt_position, height, 0.0, mesh_size)
+        else
+            load_line_pt1 = addPoint(left_pt_position, 0, 0.0, mesh_size)
+            load_line_pt2 = addPoint(right_pt_position, 0, 0.0, mesh_size)
+        end
     end
 
     return load_line_pt1, load_line_pt2
