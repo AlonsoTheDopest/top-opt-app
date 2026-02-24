@@ -17,4 +17,4 @@ ENV WSPORT="8000"
 ENV EARLYBIND="true"
 ENV JULIA_CPU_TARGET="generic"
 RUN julia -e "using Pkg; Pkg.activate(\".\"); Pkg.instantiate(); Pkg.precompile(); "
-ENTRYPOINT ["julia", "--project", "-e", "using Pkg; Pkg.instantiate(); using Genie; Genie.loadapp(); up(async=false);"]
+ENTRYPOINT ["julia", "--project", "-e", "using Genie; Genie.loadapp(); up(async=false);"]
