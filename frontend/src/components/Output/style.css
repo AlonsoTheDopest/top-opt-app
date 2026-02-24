@@ -104,3 +104,60 @@ label, .form-label { font-size: 1.4rem !important; font-weight: bold; }
     cursor: pointer;
     margin-top: -5px; 
 }
+
+/* Make images indicate they can be clicked */
+.zoomable {
+    cursor: zoom-in;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Slight hover effect so the user knows it's clickable */
+.zoomable:hover {
+    transform: scale(1.02); 
+}
+
+/* Fullscreen greyed-out background overlay */
+.zoom-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75); 
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    
+    /* Smooth fade-in transition */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.zoom-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* The zoomed image itself */
+.zoomed-image {
+    
+    width: 90vw;
+    height: 90vh;
+    
+    
+    object-fit: contain; 
+    
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    
+    
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+.zoom-overlay.active .zoomed-image {
+    transform: scale(1);
+}

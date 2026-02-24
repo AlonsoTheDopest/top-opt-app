@@ -1,24 +1,166 @@
+/* --- GLOBAL THEME VARIABLES --- */
+:root {
+    --bg-header: rgba(77, 76, 77, 0.726);
+    --bg-controls: rgba(45, 45, 45, 0.205);
+    --text-header: rgb(255, 255, 204);
+    --text-controls: black;
+}
 
+[data-theme="light"] {
+    --bg-header: rgba(220, 220, 220, 0.9);
+    --bg-controls: rgba(245, 245, 245, 0.8);
+    --text-header: #222;
+    --text-controls: #111;
+}
+
+[data-theme="slightly-dark"] {
+    --bg-header: rgba(50, 50, 50, 0.9);
+    --bg-controls: rgba(70, 70, 70, 0.85);
+    --text-header: rgb(255, 255, 204);
+    --text-controls: #f0f0f0;
+}
+
+[data-theme="dark"] {
+    --bg-header: rgba(15, 15, 15, 1);
+    --bg-controls: rgba(25, 25, 25, 1);
+    --text-header: #fff;
+    --text-controls: #fff;
+}
+
+/* --- HEADER STYLES --- */
 .main-header {
-    background-color: rgba(77, 76, 77, 0.726); 
+    background-color: var(--bg-header); 
     display: flex;
+    flex-direction: column; 
     justify-content: center; 
     align-items: center;     
-    padding: 1%;
+    padding: 1.5% 3%; 
     position: relative;      
     width: 100%;
+    min-height: 80px;
+    transition: background-color 0.3s ease;
+    gap: 15px; 
 }
 
 .headerH1 {
-    color: rgb(255 255 204);
+    color: var(--text-header); 
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin: 0; 
     text-align: center;
+    transition: color 0.3s ease;
 }
 
-.Guide_Section {
-    position: absolute; 
-    right: 5%;        
+
+.header-nav-links {
+    display: flex;
+    gap: 40px; 
+    align-items: center;
+    justify-content: center;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
-    font-size: 1.2rem;  
+    font-size: 1.2rem;
+}
+
+/* Individual link styling */
+.nav-item {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--text-header);
+    font-weight: bold;
+    transition: opacity 0.2s ease;
+}
+
+.nav-item:hover {
+    opacity: 0.8;
+}
+
+/* The 3-bar icon (hidden by default on desktop) */
+.hamburger-menu {
+    display: none;
+    position: absolute; 
+    top: 20px; 
+    right: 25px;
+    font-size: 2.2rem;
+    color: var(--text-header);
+    cursor: pointer;
+    z-index: 100;
+}
+
+/* --- THEME MODAL STYLES --- */
+.theme-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+}
+
+.theme-modal-content {
+    background-color: white; color: black;
+    padding: 2rem 3rem; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative;
+    animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-btn {
+    position: absolute; top: 10px; right: 15px;
+    background: none; border: none; font-size: 1.5rem;
+    cursor: pointer; color: #555;
+}
+
+.theme-options {
+    display: flex; flex-direction: column; gap: 15px;
+    margin: 20px 0; font-size: 1.2rem;
+}
+
+.theme-options label {
+    cursor: pointer; display: flex; align-items: center; gap: 10px;
+}
+
+.save-theme-btn {
+    width: 100%; padding: 10px; background-color: #007bff;
+    color: white; border: none; border-radius: 6px;
+    font-size: 1.1rem; cursor: pointer; transition: background 0.2s;
+}
+
+.save-theme-btn:hover { background-color: #0056b3; }
+
+/* --- RESPONSIVE DESIGN (MOBILE/TABLET) --- */
+@media (max-width: 768px) {
+    .headerH1 {
+        font-size: 1.5rem; 
+        margin-right: 40px; /* Prevents title from running into hamburger icon */
+    }
+    
+    .hamburger-menu {
+        display: block; 
+    }
+
+    .header-nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--bg-header);
+        padding: 20px;
+        gap: 20px;
+        border-radius: 0 0 0 10px;
+        box-shadow: -2px 5px 10px rgba(0,0,0,0.2);
+        
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .header-nav-links.open {
+        transform: scaleY(1);
+        opacity: 1;
+        pointer-events: all;
+        z-index: 99;
+    }
 }
