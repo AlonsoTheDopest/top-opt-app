@@ -2,19 +2,19 @@
     --global-font-size: 1.4rem; 
 }
 
-
 footer {
     min-height: 100vh; 
-    background-color: rgba(45, 45, 45, 0.205); 
-    color: black; 
+    /* Changed to use the CSS variable tied to the theme */
+    background-color: var(--bg-controls, rgba(45, 45, 45, 0.205)); 
+    color: var(--text-controls, black); 
     padding: 1%;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 p {
     font-size: var(--global-font-size) !important;
     margin-bottom: 0.5rem;
 }
-
 
 label, 
 .form-label,
@@ -24,7 +24,6 @@ label,
     font-size: var(--global-font-size) !important;
     font-weight: bold;
 }
-
 
 .form-select,
 .form-control, 
@@ -36,11 +35,9 @@ label,
     padding: 1rem !important; 
 }
 
-
 .beam-type-select {
     border-radius: 50% 20% / 10% 40%;
 }
-
 
 .large-control-button,
 .btn {

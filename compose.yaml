@@ -8,8 +8,13 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/home/react/app
+      # This line is the secret: it tells Docker NOT to overwrite 
+      # the container's Linux node_modules with your Windows ones.
+      - /home/react/app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true # Added for extra reliability on Windows
+
   backend:
     build:
       context: ./backend

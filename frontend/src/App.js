@@ -1,4 +1,4 @@
-import './App.css'
+
 import Header from "./components/Header"
 import Controls from "./components/Controls"
 import Output from "./components/Output"
