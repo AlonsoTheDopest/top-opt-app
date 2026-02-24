@@ -52,6 +52,7 @@ export default function Output({beamType, simulationImage, loadEdge}) {
 
         default:
             break;
+    }
     
     return (
         <div className="output-wrapper">
