@@ -18,7 +18,9 @@ import BoundaryConditionInput from './BoundaryConditionInput';
 export default function Controls({
     beamType, 
     setBeamType, 
-    setSimulationImage
+    setSimulationImage,
+    loadEdge,
+    setLoadEdge
 })
 {
     const [volumeFraction, setVolumeFraction] = useState(0.3);
@@ -27,7 +29,7 @@ export default function Controls({
     const [length, setLength] = useState(60.0)
     const [height, setHeight] = useState(20.0)
     const [loadLocation, setLoadLocation] = useState(height / 2.0);
-    const [loadEdge, setLoadEdge] = useState("right")
+    // const [loadEdge, setLoadEdge] = useState("right")
     const [boundaryConditions, setBoundaryConditions] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -51,63 +53,90 @@ export default function Controls({
         {
             setLoadEdge("top")
         }
-    }, [beamType])
+    }, [beamType, setLoadEdge])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setIsLoading(true);
-        setLastRunTime(null);
-        setElapsedTime(0);
-        // 2. CLEAR OLD IMAGE WHEN STARTING NEW RUN
-        setSimulationImage(null);
+        let i = 0;
+        const arrLen = boundaryConditions.length;
+        let conflicts = false;
+        let bc;
 
-        startTimeRef.current = Date.now();
-
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
+        while(i < arrLen && !conflicts)
+        {
+            bc = boundaryConditions[i];
+            if ((bc.boundary.includes("Top") && loadEdge === "top") ||
+                (bc.boundary.includes("Bottom") && loadEdge === "bottom") ||
+                (bc.boundary.includes("Left") && loadEdge === "left") ||
+                (bc.boundary.includes("Right") && loadEdge === "right"))
+            {
+                conflicts = true;
+            }
+            i++
         }
 
-        intervalRef.current = setInterval(() => {
-            const seconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            setElapsedTime(seconds);
-        }, 1000);
+        if (conflicts)
+        {
+            alert("Load edge conflicts with boundary conditions. Select a different load edge")
+        }
 
-        const topOptArgs = { 
-            beamType, 
-            volumeFraction, 
-            iterations, 
-            loadEdge,
-            load, 
-            loadLocation, 
-            length, 
-            height,
-            boundaryConditions
-        };
+        else
+        {
+            setIsLoading(true);
+            setLastRunTime(null);
+            setElapsedTime(0);
+            // 2. CLEAR OLD IMAGE WHEN STARTING NEW RUN
+            setSimulationImage(null);
 
-        try {
-            const res = await fetch("/run-top-opt", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(topOptArgs)
-            });
+            startTimeRef.current = Date.now();
 
-            const data = await res.json();
-
-            if (data.image) {
-                setSimulationImage(data.image);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
             }
 
-        } catch (error) {
-            console.error("Optimization error:", error);
-        } finally {
-            setIsLoading(false);
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-            
-            const finalSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            setLastRunTime(finalSeconds);
-            setElapsedTime(0);
+            intervalRef.current = setInterval(() => {
+                const seconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
+                setElapsedTime(seconds);
+            }, 1000);
+
+        
+            const topOptArgs = { 
+                beamType, 
+                volumeFraction, 
+                iterations, 
+                loadEdge,
+                load, 
+                loadLocation, 
+                length, 
+                height,
+                boundaryConditions
+            };
+
+            try {
+                const res = await fetch("/run-top-opt", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(topOptArgs)
+                });
+
+                const data = await res.json();
+
+                if (data.image) {
+                    setSimulationImage(data.image);
+                }
+
+            } catch (error) {
+                alert(`Optimization error:${error}`)
+            } finally {
+                setIsLoading(false);
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+                
+                const finalSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
+                setLastRunTime(finalSeconds);
+                setElapsedTime(0);
+            }
         }
     };
 

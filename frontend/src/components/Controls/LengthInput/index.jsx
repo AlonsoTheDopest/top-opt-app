@@ -6,13 +6,13 @@ export default function LengthInput({
     beamType
 })
 {
-    const min = 0;
+    const min = 1;
     const max = 60;
-    const step = 2;
+    const step = 1;
 
     useEffect(() => {
         setLength(60.0)
-    }, [beamType]);
+    }, [beamType, setLength]);
     
     return (
         <>

@@ -41,7 +41,7 @@ route( "/run-top-opt", method = POST ) do
 
     for obj in boundary_conditions
         push!(boundaries, obj["boundary"])
-        flags = obj["dof_flags"]
+        flags = obj["dofFlags"]
         push!(masks, (flags[1], flags[2]))
     end
 
