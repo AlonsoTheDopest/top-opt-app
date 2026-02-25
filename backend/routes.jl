@@ -35,6 +35,7 @@ route( "/run-top-opt", method = POST ) do
     iterations = Integer(top_opt_args["iterations"])
     load_location = Float64(top_opt_args["loadLocation"])
     boundary_conditions = top_opt_args["boundaryConditions"]
+    load_angle = Integer(top_opt_args["loadAngle"])
 
     boundaries = String[]
     masks = Tuple{Bool,Bool}[]
@@ -45,8 +46,6 @@ route( "/run-top-opt", method = POST ) do
         push!(masks, (flags[1], flags[2]))
     end
 
-    println(boundaries)
-    println(masks)  
 
     image_path = topology_optimization_driver( 
         length, 
@@ -58,7 +57,8 @@ route( "/run-top-opt", method = POST ) do
         iterations, 
         load_location,
         boundaries,
-        masks
+        masks,
+        load_angle
     )
 
     encoded_image = get_encoded_image(image_path)

@@ -14,7 +14,8 @@ function topology_optimization_driver(
     iterations::Integer,
     load_position::Float64,
     boundaries,
-    masks
+    masks,
+    load_angle
 )
     createBeamMesh(length, height, beamtype, load_edge, load_position)
 
@@ -23,7 +24,7 @@ function topology_optimization_driver(
     #       Time wasted: 25 hrs
     global f, volfrac, MAX_ITER, beam_type, result_image_path, elemsize, l, h, direchlet_masks, direchlet_tags
 
-    f = VectorValue(0.0, load)
+    f = VectorValue(load * cosd(load_angle), load * sind(load_angle))
     volfrac = volumefraction
     MAX_ITER = iterations
     beam_type = beamtype
