@@ -1,17 +1,22 @@
-import {useState, useEffect} from "react"
+import {useState} from "react"
+
+import SelectInput from "../SelectInput";
 
 const SIDES = [
-    "TopSide",
-    "BottomSide",
-    "RightSide",
-    "LeftSide"
+    {name: "Top Side", value: "TopSide"},
+    {name: "Bottom Side", value: "BottomSide"},
+    {name: "Right Side", value: "RightSide"},
+    {name: "Left Side", value: "LeftSide"}
 ]
+
 const CORNERS = [
-    "BottomLeftCorner",
-    "BottomRightCorner",
-    "TopRightCorner",
-    "TopLeftCorner"
+    {name: "Bottom Left Corner", value: "BottomLeftCorner"},
+    {name: "Bottom Right Corner", value: "BottomRightCorner"},
+    {name: "Top Left Corner", value: "TopLeftCorner"},
+    {name: "Top Right Corner", value: "TopRightCorner"}
 ]
+
+const MAX_SIDES = 3;
 
 let nextId = -1;
 
@@ -23,6 +28,10 @@ export default function BoundaryConditionInput({
     const [boundary, setBoundary] = useState("TopSide")
     const [dofFlags, setDofFlags] = useState([true, true])
     
+
+    const handleDofFlagChange = (flags) => {
+        !flags[0] && !flags[1] ? setDofFlags([true, true]) : setDofFlags(flags)
+    }
 
     const handleClick = () => {
         let exists = false;
@@ -53,7 +62,7 @@ export default function BoundaryConditionInput({
             if (bc.boundary.includes("Side"))
             {
                 sides++
-                if (boundary.includes("Side") && sides >= 3)
+                if (boundary.includes("Side") && sides >= MAX_SIDES)
                 {
                     tooManySides = true;
                 }
@@ -64,17 +73,17 @@ export default function BoundaryConditionInput({
         
         if (exists)
         {
-            alert("Boundary condition exists.")
+            alert("Boundary exists.")
         }
 
         else if (conflicts)
         {
-            alert("Boundary condition conflicts with existing boundary condition.")
+            alert("Boundary conflicts with existing boundary.")
         }
 
         else if (tooManySides)
         {
-            alert("Too many boundary conditions with sides (max=3).")
+            alert(`Too many boundary conditions with sides (max=${MAX_SIDES}).`)
         }
 
         else
@@ -90,13 +99,6 @@ export default function BoundaryConditionInput({
         }
     }
 
-    useEffect(() => {
-        if (!dofFlags[0] && !dofFlags[1])
-        {
-            setDofFlags([true, true])
-        }
-    }, [dofFlags])
-
     return (
         <>
             <label>
@@ -107,32 +109,30 @@ export default function BoundaryConditionInput({
             <input 
                 type="checkbox"
                 checked={dofFlags[0]}
-                onChange={e => setDofFlags([e.target.checked, dofFlags[1]])}
+                onChange={e => handleDofFlagChange([e.target.checked, dofFlags[1]])}
             ></input>
 
             <label>Fix y</label>
             <input 
                 type="checkbox"
                 checked={dofFlags[1]}
-                onChange={e => setDofFlags([dofFlags[0], e.target.checked])}
+                onChange={e => handleDofFlagChange([dofFlags[0], e.target.checked])}
             ></input>
 
-            <select 
+            <SelectInput
+                htmlFor={"boundary"}
+                labelName={"Boundary"}
                 value={boundary}
-                onChange={e => setBoundary(e.target.value)}
-            >
-                {SIDES.map(item => (
-                    <option value={item}>{item}</option>
-                ))}
-                {CORNERS.map(item => (
-                    <option value={item}>{item}</option>
-                ))}
-            </select>
+                handleChange={setBoundary}
+                items={[...SIDES, ...CORNERS]}
+            />
 
             <button type="button" onClick={handleClick}>Add</button>
             {boundaryConditions.map(bc => (
                 <>
-                    <p key={bc.id}>{bc.boundary} (Fix x: {bc.dofFlags[0] ? "true" : "false"}, Fix y: {bc.dofFlags[1] ? "true" : "false"})</p>
+                    <p key={bc.id}>
+                        {bc.boundary} (Fix x: {bc.dofFlags[0] ? "true" : "false"}, Fix y: {bc.dofFlags[1] ? "true" : "false"})
+                    </p>
                     <button 
                         type="button"
                         onClick={() => {
