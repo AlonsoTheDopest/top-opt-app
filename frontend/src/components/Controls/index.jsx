@@ -1,18 +1,25 @@
 import {useState, useRef, useEffect} from 'react';
 import "./style.css"
-import {
-    BeamTypeInput,
-    LoadInput,
-    LoadLocationInput,
-    VolumeFractionInput,
-    IterationsInput
-} from "./Inputs"
 import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
-import LengthInput from './LengthInput';
-import HeightInput from './HeightInput';
-import LoadEdgeInput from './LoadEdgeInput';
 import BoundaryConditionInput from './BoundaryConditionInput';
+import LoadLocationInput from './LoadLocationInput';
+import NumberInput from './NumberInput';
+import RangeInput from './RangeInput';
+import SelectInput from './SelectInput';
+
+const BEAMS = [
+    {name: "Cantilever", value: "cantilever"},
+    {name: "Half MBB", value: "half-mbb"},
+    {name: "General", value: "general"},
+]
+
+const EDGES = [
+        {name: "Top", value: "top"},
+        {name: "Bottom", value: "bottom"},
+        {name: "Right", value: "right"},
+        {name: "Left", value: "left"},
+    ]
 
 // 1. ADD setSimulationImage TO PROPS
 export default function Controls({
@@ -29,8 +36,8 @@ export default function Controls({
     const [length, setLength] = useState(60.0)
     const [height, setHeight] = useState(20.0)
     const [loadLocation, setLoadLocation] = useState(height / 2.0);
-    // const [loadEdge, setLoadEdge] = useState("right")
     const [boundaryConditions, setBoundaryConditions] = useState([]);
+    const [loadAngle, setLoadAngle] = useState(0.0);
 
     const [isLoading, setIsLoading] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -110,7 +117,8 @@ export default function Controls({
                 loadLocation, 
                 length, 
                 height,
-                boundaryConditions
+                boundaryConditions,
+                loadAngle
             };
 
             try {
@@ -147,9 +155,12 @@ export default function Controls({
                     <Container className="d-flex flex-column justify-content-evenly flex-grow-1 text-center py-4 fs-3">
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
-                                <BeamTypeInput
-                                    beamType = {beamType}
-                                    setBeamType = {setBeamType}
+                                <SelectInput
+                                    htmlFor={"beam-type"}
+                                    labelName={"Beam Type"}
+                                    value={beamType}
+                                    handleChange={setBeamType}
+                                    items={BEAMS}
                                 />
                             </Col>
                         </Row>
@@ -157,19 +168,27 @@ export default function Controls({
                             <>
                                 <Row className="justify-content-center large-control-container">
                                     <Col md={8} lg={6}>
-                                        <LengthInput
-                                            length={length}
-                                            setLength={setLength}
-                                            beamType={beamType}
+                                        <NumberInput
+                                            htmlFor={"length"}
+                                            labelName={"Length (L)"}
+                                            value={length}
+                                            setValue={setLength}
+                                            min={1}
+                                            max={60}
+                                            step={1}
                                         />
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-center large-control-container">
                                     <Col md={8} lg={6}>
-                                        <HeightInput
-                                            height={height}
-                                            setHeight={setHeight}
-                                            beamType={beamType}
+                                        <NumberInput
+                                            htmlFor={"height"}
+                                            labelName={"Height (H)"}
+                                            value={height}
+                                            setValue={setHeight}
+                                            min={1}
+                                            max={60}
+                                            step={1}
                                         />
                                     </Col>
                                 </Row>
@@ -183,21 +202,46 @@ export default function Controls({
                                 </Row>
                                 <Row className="justify-content-center large-control-container">
                                     <Col md={8} lg={6}>
-                                        <LoadEdgeInput
-                                            loadEdge={loadEdge}
-                                            setLoadEdge={setLoadEdge}
+                                        <SelectInput
+                                            htmlFor={"load-edge"}
+                                            labelName={"Load Edge"}
+                                            value={loadEdge}
+                                            handleChange={setLoadEdge}
+                                            items={EDGES}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="justify-content-center large-control-container">
+                                    <Col md={8} lg={6}>
+                                        <NumberInput
+                                            htmlFor={"load-angle"}
+                                            labelName={"Load Angle"}
+                                            value={loadAngle}
+                                            setValue={setLoadAngle}
+                                            min={0}
+                                            max={359}
+                                            step={1}
                                         />
                                     </Col>
                                 </Row>
                             </>
-                        ) : (
-                            <></>
-                        )}
+                        ) : (<></>)}
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
-                                <LoadInput 
-                                    load = { load }
-                                    setLoad = { setLoad }
+                                <RangeInput
+                                    htmlFor={"load"}
+                                    labelName={"Load"}
+                                    value={load}
+                                    min={-1}
+                                    max={1}
+                                    step={0.1}
+                                    handleChange={newValue => {
+                                        if (newValue === 0)
+                                        {
+                                            newValue = load > 0 ? 0.1 : -0.1
+                                        }
+                                        setLoad(newValue)
+                                    }}
                                 />
                             </Col>
                         </Row>
@@ -205,8 +249,8 @@ export default function Controls({
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
                                 <LoadLocationInput 
-                                    loadLocation = { loadLocation }
-                                    setLoadLocation = { setLoadLocation }
+                                    loadLocation = {loadLocation}
+                                    setLoadLocation = {setLoadLocation}
                                     length={length}
                                     height={height}
                                     loadEdge={loadEdge}
@@ -216,18 +260,28 @@ export default function Controls({
 
                         <Row className="justify-content-center ">
                             <Col md={8} lg={6}>
-                                <VolumeFractionInput
-                                    volumeFraction = { volumeFraction }
-                                    setVolumeFraction = { setVolumeFraction }
+                                <RangeInput
+                                    htmlFor={"volume-fraction"}
+                                    labelName={"Volume Fraction"}
+                                    value={volumeFraction}
+                                    min={0.1}
+                                    max={0.9}
+                                    step={0.1}
+                                    handleChange={setVolumeFraction}
                                 />
                             </Col>
                         </Row>
                         
                         <Row className="justify-content-center large-control-container">
                             <Col md={8} lg={6}>
-                                <IterationsInput
-                                    iterations = { iterations }
-                                    setIterations = { setIterations }
+                                <NumberInput
+                                    htmlFor={"iterations"}
+                                    labelName={"Iterations"}
+                                    value={iterations}
+                                    setValue={setIterations}
+                                    min={50}
+                                    max={500}
+                                    step={50}
                                 />
                             </Col>
                         </Row>
