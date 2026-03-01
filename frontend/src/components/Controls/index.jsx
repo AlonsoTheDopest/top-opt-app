@@ -148,13 +148,20 @@ export default function Controls({
         }
     };
 
+// 1. DYNAMIC COLUMN SIZING: 4 (1/3 width) for General, 6 (1/2 width) for others
+    const dynamicMd = beamType === "general" ? 4 : 6;
+
     return (
         <>
             <footer className="d-flex">
                 <form onSubmit={handleSubmit} className="d-flex flex-grow-1">
-                    <Container className="d-flex flex-column justify-content-evenly flex-grow-1 text-center py-4 fs-3">
-                        <Row className="justify-content-center large-control-container">
-                            <Col md={8} lg={6}>
+                    <Container className="d-flex flex-column justify-content-start flex-grow-1 text-center pt-4 pb-2">
+                        
+                        {/* 2. ALIGN-ITEMS-END: Forces all inputs to align at their bottom edge */}
+                        <Row className="justify-content-center align-items-end g-4">
+                            
+                            {/* Beam Type */}
+                            <Col xs={12} sm={6} md={dynamicMd}>
                                 <SelectInput
                                     htmlFor={"beam-type"}
                                     labelName={"Beam Type"}
@@ -163,45 +170,35 @@ export default function Controls({
                                     items={BEAMS}
                                 />
                             </Col>
-                        </Row>
-                        {beamType === "general" ? (
-                            <>
-                                <Row className="justify-content-center large-control-container">
-                                    <Col md={8} lg={6}>
+
+                            {/* General Settings */}
+                            {beamType === "general" && (
+                                <>
+                                    <Col xs={12} sm={6} md={dynamicMd}>
                                         <NumberInput
                                             htmlFor={"length"}
                                             labelName={"Length (L)"}
                                             value={length}
                                             setValue={setLength}
-                                            min={1}
-                                            max={60}
-                                            step={1}
+                                            min={1} max={60} step={1}
                                         />
                                     </Col>
-                                </Row>
-                                <Row className="justify-content-center large-control-container">
-                                    <Col md={8} lg={6}>
+                                    <Col xs={12} sm={6} md={dynamicMd}>
                                         <NumberInput
                                             htmlFor={"height"}
                                             labelName={"Height (H)"}
                                             value={height}
                                             setValue={setHeight}
-                                            min={1}
-                                            max={60}
-                                            step={1}
+                                            min={1} max={60} step={1}
                                         />
                                     </Col>
-                                </Row>
-                                <Row className="justify-content-center large-control-container">
-                                    <Col md={8} lg={6}>
+                                    <Col xs={12} md={12}>
                                         <BoundaryConditionInput
                                             boundaryConditions={boundaryConditions}
                                             setBoundaryConditions={setBoundaryConditions}
                                         />
                                     </Col>
-                                </Row>
-                                <Row className="justify-content-center large-control-container">
-                                    <Col md={8} lg={6}>
+                                    <Col xs={12} sm={6} md={dynamicMd}>
                                         <SelectInput
                                             htmlFor={"load-edge"}
                                             labelName={"Load Edge"}
@@ -210,84 +207,65 @@ export default function Controls({
                                             items={EDGES}
                                         />
                                     </Col>
-                                </Row>
-                                <Row className="justify-content-center large-control-container">
-                                    <Col md={8} lg={6}>
+                                    <Col xs={12} sm={6} md={dynamicMd}>
                                         <NumberInput
                                             htmlFor={"load-angle"}
                                             labelName={"Load Angle"}
                                             value={loadAngle}
                                             setValue={setLoadAngle}
-                                            min={0}
-                                            max={359}
-                                            step={1}
+                                            min={0} max={359} step={1}
                                         />
                                     </Col>
-                                </Row>
-                            </>
-                        ) : (<></>)}
-                        <Row className="justify-content-center ">
-                            <Col md={8} lg={6}>
+                                </>
+                            )}
+                            
+                            {/* Standard Controls */}
+                            <Col xs={12} sm={6} md={dynamicMd}>
                                 <RangeInput
                                     htmlFor={"load"}
                                     labelName={"Load"}
                                     value={load}
-                                    min={-1}
-                                    max={1}
-                                    step={0.1}
+                                    min={-1} max={1} step={0.1}
                                     handleChange={newValue => {
-                                        if (newValue === 0)
-                                        {
+                                        if (newValue === 0) {
                                             newValue = load > 0 ? 0.1 : -0.1
                                         }
                                         setLoad(newValue)
                                     }}
                                 />
                             </Col>
-                        </Row>
-                        
-                        <Row className="justify-content-center ">
-                            <Col md={8} lg={6}>
+                            <Col xs={12} sm={6} md={dynamicMd}>
                                 <LoadLocationInput 
-                                    loadLocation = {loadLocation}
-                                    setLoadLocation = {setLoadLocation}
+                                    loadLocation={loadLocation}
+                                    setLoadLocation={setLoadLocation}
                                     length={length}
                                     height={height}
                                     loadEdge={loadEdge}
                                 />
                             </Col>
-                        </Row>
-
-                        <Row className="justify-content-center ">
-                            <Col md={8} lg={6}>
+                            <Col xs={12} sm={6} md={dynamicMd}>
                                 <RangeInput
                                     htmlFor={"volume-fraction"}
                                     labelName={"Volume Fraction"}
                                     value={volumeFraction}
-                                    min={0.1}
-                                    max={0.9}
-                                    step={0.1}
+                                    min={0.1} max={0.9} step={0.1}
                                     handleChange={setVolumeFraction}
                                 />
                             </Col>
-                        </Row>
-                        
-                        <Row className="justify-content-center large-control-container">
-                            <Col md={8} lg={6}>
+                            <Col xs={12} sm={6} md={dynamicMd}>
                                 <NumberInput
                                     htmlFor={"iterations"}
                                     labelName={"Iterations"}
                                     value={iterations}
                                     setValue={setIterations}
-                                    min={50}
-                                    max={500}
-                                    step={50}
+                                    min={50} max={500} step={50}
                                 />
                             </Col>
                         </Row>
 
-                        <Row className="justify-content-center">
-                            <Col>
+                        {/* Bottom Row: Submit Button (Kept slightly wider so it looks like a main action button) */}
+                        <Row className="justify-content-center mt-4">
+                            <Col xs={12} sm={8} md={6}>
                                 <SubmitButton
                                     isLoading={isLoading}
                                     elapsedTime={elapsedTime}
@@ -300,4 +278,5 @@ export default function Controls({
             </footer>
         </>
     );
+
 }

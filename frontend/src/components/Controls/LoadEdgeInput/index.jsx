@@ -11,7 +11,7 @@ export default function LoadEdgeInput({loadEdge, setLoadEdge})
         <>
             <label 
                 htmlFor="load-edge" 
-                className="form-label large-control-label"
+                className="form-label"
             >
                 <p className='controlText'>Load Edge:</p>
             </label>
