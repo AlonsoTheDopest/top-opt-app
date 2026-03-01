@@ -10,11 +10,11 @@ export default function NumberInput({
 {
     return (
         <>
-            <label htmlFor={htmlFor} className="form-label large-control-label">
+            <label htmlFor={htmlFor} className="form-label">
                 {labelName} &isin; [{min}, {max}], &Delta;={step}:
             </label>
             <input
-                className="form-control large-control-input"
+                className="form-control"
                 type="number"
                 name={htmlFor}
                 min={min} max={max} step={step}

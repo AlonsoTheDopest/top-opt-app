@@ -16,7 +16,7 @@ export default function LengthInput({
     
     return (
         <>
-            <label htmlFor="length" className="form-label large-control-label">
+            <label htmlFor="length" className="form-label">
                 Length &isin; [{min}, {max}], &Delta;={step}:
             </label>
             <input

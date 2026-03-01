@@ -16,7 +16,7 @@ export default function HeightInput({
 
     return (
         <>
-            <label htmlFor="height" className="form-label large-control-label">
+            <label htmlFor="height" className="form-label">
                 Height &isin; [{min}, {max}], &Delta;={step}:
             </label>
             <input

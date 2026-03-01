@@ -1,10 +1,10 @@
 :root {
-    --global-font-size: 1.4rem; 
+    /* Reduced to 1rem for standard, compact text sizing */
+    --global-font-size: 1rem; 
 }
 
 footer {
     min-height: 100vh; 
-    /* Changed to use the CSS variable tied to the theme */
     background-color: var(--bg-controls, rgba(45, 45, 45, 0.205)); 
     color: var(--text-controls, black); 
     padding: 1%;
@@ -13,16 +13,22 @@ footer {
 
 p {
     font-size: var(--global-font-size) !important;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
+/* This block targets standard labels AND forces Bootstrap heading/size 
+  classes to shrink down to your global font size, unifying all titles.
+*/
 label, 
 .form-label,
 .controlText,
 .lastRun,
-.timer-display {
+.timer-display,
+footer h1, footer h2, footer h3, footer h4, footer h5, footer h6,
+footer .fs-1, footer .fs-2, footer .fs-3, footer .fs-4, footer .fs-5, footer .fs-6 {
     font-size: var(--global-font-size) !important;
     font-weight: bold;
+    margin-bottom: 0.25rem;
 }
 
 .form-select,
@@ -32,7 +38,8 @@ label,
 .beam-type-select {
     font-size: var(--global-font-size) !important;
     height: auto !important;
-    padding: 1rem !important; 
+    /* Reduced padding to make the input boxes significantly shorter and sleeker */
+    padding: 0.4rem 0.75rem !important; 
 }
 
 .beam-type-select {
@@ -42,8 +49,8 @@ label,
 .large-control-button,
 .btn {
     font-size: var(--global-font-size) !important;
-    padding: 1rem 2rem !important;
-    border-radius: 1rem !important;
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 0.5rem !important; 
     width: 100%;
     max-width: 600px;
 }
