@@ -11,6 +11,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 function MainMenu()
 {
   const [beamType, setBeamType] = useState('cantilever');
+  const [loadEdge, setLoadEdge] = useState("right");
 
   // 1. NEW STATE: Holds the result image from the server
   const [simulationImage, setSimulationImage] = useState(null);
@@ -22,6 +23,7 @@ function MainMenu()
           <Output
             beamType={beamType}
             simulationImage={simulationImage}
+            loadEdge={loadEdge}
           /> 
         </Col>
         <Col>
@@ -29,6 +31,8 @@ function MainMenu()
             beamType={beamType} 
             setBeamType={setBeamType} 
             setSimulationImage={setSimulationImage}
+            loadEdge={loadEdge}
+            setLoadEdge={setLoadEdge}
           />
         </Col>
       </Row>
