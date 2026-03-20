@@ -18,6 +18,10 @@ function get_results()
     return json(results)
 end
 
+route("/") do 
+    serve_static_file("index.html")
+end
+
 route("/results", method = GET) do
     return get_results()
 end
