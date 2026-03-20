@@ -1,0 +1,25 @@
+FROM node:20-alpine AS frontend 
+WORKDIR /app/ COPY frontend/package*.json . 
+RUN npm install COPY frontend/ . 
+RUN npm run build 
+
+FROM julia:1.11.6 
+RUN apt-get update && apt-get install -y vim 
+RUN useradd --create-home --shell /bin/bash genie 
+WORKDIR /home/genie/app/ 
+COPY backend/ ./
+COPY --from=frontend /app/build/ ./public/ 
+RUN chown -R genie:genie /home/ 
+USER genie 
+EXPOSE 8000 
+EXPOSE 80 
+ENV JULIA_DEPOT_PATH="/home/genie/.julia" 
+ENV JULIA_REVISE="off" 
+ENV GENIE_ENV="prod" 
+ENV GENIE_HOST="0.0.0.0" 
+ENV PORT="8000" 
+ENV WSPORT="8000" 
+ENV EARLYBIND="true" 
+ENV JULIA_CPU_TARGET="generic"
+RUN julia -e "using Pkg; Pkg.activate(\".\"); Pkg.instantiate(); Pkg.precompile();" 
+ENTRYPOINT ["julia", "--project", "-e", "using Genie; Genie.loadapp(); up(async=true);"]
