@@ -141,6 +141,7 @@ export default function Controls({
                 if (data.image) {
                     setSimulationImage(data.image);
                 }
+                alert("Publisher recently made a new result! Go check it out in the Results page!")
 
             } catch (error) {
                 alert(`Optimization error:${error}`)
