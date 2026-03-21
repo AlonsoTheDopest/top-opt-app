@@ -74,6 +74,21 @@ function Results()
   )
 }
 
+
+function Login()
+{
+  return (
+    <>
+      <h1>Login</h1>
+      <form>
+        <label htmlFor="username">Usename:</label>
+        <input type="text" name="username"/>
+      </form>
+    </>
+  );
+}
+
+
 function App() {
   return (
     <BrowserRouter>
