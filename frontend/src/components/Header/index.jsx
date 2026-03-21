@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import "./style.css"
 import UserGuidePdf from "../../images/User_Guide-Topology_Optimization.pdf";
+import { Link } from "react-router-dom";
 
 export default function Header() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,6 +57,14 @@ export default function Header() {
                 >
                     📺 Video Tutorial
                 </a>
+
+                <Link to="/login" className="nav-item">
+                    Login
+                </Link>
+
+                <Link to="/results" className="nav-item">
+                    Results
+                </Link>
             </nav>
 
             {/* --- THEME SELECTOR MODAL --- */}
