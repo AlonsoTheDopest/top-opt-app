@@ -81,7 +81,7 @@ function Login()
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("username", username);
+    sessionStorage.setItem("username", username);
   }
 
   return (
