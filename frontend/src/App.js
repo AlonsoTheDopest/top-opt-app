@@ -77,12 +77,19 @@ function Results()
 
 function Login()
 {
+  const [username, setUsername] = useState("")
+
   return (
     <>
       <h1>Login</h1>
       <form>
         <label htmlFor="username">Usename:</label>
-        <input type="text" name="username" required/><br/>
+        <input 
+          type="text" 
+          name="username" 
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required/><br/>
 
         <input type="submit"/>
       </form>
