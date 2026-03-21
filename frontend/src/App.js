@@ -82,7 +82,9 @@ function Login()
       <h1>Login</h1>
       <form>
         <label htmlFor="username">Usename:</label>
-        <input type="text" name="username" required/>
+        <input type="text" name="username" required/><br/>
+
+        <input type="submit"/>
       </form>
     </>
   );
