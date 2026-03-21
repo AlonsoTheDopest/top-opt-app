@@ -65,6 +65,14 @@ export default function Controls({
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const username = sessionStorage.getItem("username");
+        if (!username)
+        {
+            alert("Login/Register to become a publisher and try again.")
+            return;
+        }
+
+        alert(`Publishing results as "${username}"`)
         let i = 0;
         const arrLen = boundaryConditions.length;
         let conflicts = false;

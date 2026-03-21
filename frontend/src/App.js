@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 function MainMenu()
 {
@@ -78,10 +79,13 @@ function Results()
 function Login()
 {
   const [username, setUsername] = useState("")
+  const nav = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     sessionStorage.setItem("username", username);
+    alert(`Logged in as "${username}"`)
+    nav("/");
   }
 
   return (
