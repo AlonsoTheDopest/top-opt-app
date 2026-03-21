@@ -79,10 +79,16 @@ function Login()
 {
   const [username, setUsername] = useState("")
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("username", username);
+  }
+
   return (
     <>
-      <h1>Login</h1>
-      <form>
+      <h1>Login/Register Page</h1>
+      <p>Login/Register to become a publisher</p>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="username">Usename:</label>
         <input 
           type="text" 
