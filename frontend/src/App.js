@@ -74,12 +74,43 @@ function Results()
   )
 }
 
+
+function Login()
+{
+  const [username, setUsername] = useState("")
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("username", username);
+  }
+
+  return (
+    <>
+      <h1>Login/Register Page</h1>
+      <p>Login/Register to become a publisher</p>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Usename:</label>
+        <input 
+          type="text" 
+          name="username" 
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required/><br/>
+
+        <input type="submit"/>
+      </form>
+    </>
+  );
+}
+
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainMenu/>}/>
         <Route path="/results" element={<Results/>}/>
+        <Route path="/login" element={<Login/>}/>
       </Routes>
     </BrowserRouter>
   );
