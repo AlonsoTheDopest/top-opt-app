@@ -82,7 +82,7 @@ function Login()
       <h1>Login</h1>
       <form>
         <label htmlFor="username">Usename:</label>
-        <input type="text" name="username"/>
+        <input type="text" name="username" required/>
       </form>
     </>
   );
@@ -95,6 +95,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainMenu/>}/>
         <Route path="/results" element={<Results/>}/>
+        <Route path="/login" element={<Login/>}/>
       </Routes>
     </BrowserRouter>
   );
