@@ -8,7 +8,7 @@ const TWO_DIM = 2;
 const OFFSET = 0.1
 
 function calculateMeshSize(length::Float64)
-    return length / 160.0
+    return length / 90.0
 end
 
 function createBeamMesh(

@@ -49,16 +49,19 @@ export default function Controls({
         if (beamType === "cantilever" )
         {
             setLoadEdge("right")
+            setLoadAngle(90.0);
         }
 
         else if (beamType === "half-mbb")
         {
             setLoadEdge("top")
+            setLoadAngle(90.0);
         }
 
         else if (beamType === "general")
         {
             setLoadEdge("top")
+            setLoadAngle(0)
         }
     }, [beamType, setLoadEdge])
 
@@ -69,14 +72,21 @@ export default function Controls({
         const arrLen = boundaryConditions.length;
         let conflicts = false;
         let bc;
-
+        if (arrLen === 0)
+        {
+            alert("No boundary conditions applied. Create boundary conditions")
+            conflicts = true;
+            return;
+        }
+        
         while(i < arrLen && !conflicts)
         {
             bc = boundaryConditions[i];
-            if ((bc.boundary.includes("Top") && loadEdge === "top") ||
+            if (!bc.boundary.includes("Corner") &&
+                ((bc.boundary.includes("Top") && loadEdge === "top") ||
                 (bc.boundary.includes("Bottom") && loadEdge === "bottom") ||
                 (bc.boundary.includes("Left") && loadEdge === "left") ||
-                (bc.boundary.includes("Right") && loadEdge === "right"))
+                (bc.boundary.includes("Right") && loadEdge === "right")))
             {
                 conflicts = true;
             }
@@ -253,11 +263,11 @@ export default function Controls({
                                 />
                             </Col>
                             <Col xs={12} sm={6} md={dynamicMd}>
-                                <NumberInput
+                                <RangeInput
                                     htmlFor={"iterations"}
                                     labelName={"Iterations"}
                                     value={iterations}
-                                    setValue={setIterations}
+                                    handleChange={setIterations}
                                     min={50} max={500} step={50}
                                 />
                             </Col>
