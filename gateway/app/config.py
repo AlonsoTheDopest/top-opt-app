@@ -2,5 +2,5 @@
 ROUTES = {
     "backend": ("http://backend:8000"),
     "frontend": ("http://frontend:3000"),
-    "mesh": ("http://mesh-utils:8000")
+    "mesh-utils": ("http://mesh-utils:8000")
 }

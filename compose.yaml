@@ -35,15 +35,13 @@ services:
       - mesh-utils
       - frontend
     ports:
-      - "8080:80" # expose gateway on host 8080 -> container 80 (uvicorn/gunicorn)
+      - "8080:80"
     volumes:
       - ./gateway:/app
     environment:
       - WORKERS_PER_CORE=1
       - MAX_WORKERS=2
       - LOG_LEVEL=info
-    command: >
-      /start-reload.sh
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/health || exit 1"]
       interval: 120s

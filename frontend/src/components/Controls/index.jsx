@@ -1,4 +1,5 @@
 import {useState, useRef, useEffect} from 'react';
+import axios from "axios"
 import "./style.css"
 import SubmitButton from "./SubmitButton"
 import { Container, Row, Col } from 'react-bootstrap';
@@ -132,13 +133,7 @@ export default function Controls({
             };
 
             try {
-                const res = await fetch("/run-top-opt", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(topOptArgs)
-                });
-
-                const data = await res.json();
+                const data = (await axios.post("/api/backend/run-top-opt", topOptArgs)).data;
 
                 if (data.image) {
                     setSimulationImage(data.image);

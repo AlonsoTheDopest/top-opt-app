@@ -2,6 +2,7 @@
 import Header from "./components/Header"
 import Controls from "./components/Controls"
 import Output from "./components/Output"
+import axios from "axios"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import { useState, useEffect } from 'react';
 
@@ -44,9 +45,8 @@ function Results()
 {
   const [results, setResults] = useState([])
   const getResults = async () => {
-    const res = await fetch("/results", {method: "GET"})
-    const data = await res.json()
-    setResults(data)
+    const res = await axios.get("/api/backend/results");
+    setResults(res.data)
   }
 
   useEffect(() => {
