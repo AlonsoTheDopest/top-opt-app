@@ -36,7 +36,7 @@ const  ν_mat = 0.3
 const  ηe = 1e-15
 const  penal = 3
 
-model = GmshDiscreteModel("./mesh.msh")
+model = GmshDiscreteModel(mesh_file)
 
 function  ElasFourthOrderConstTensor(E,ν,PlanarState)
     # 1 for  Plane  Stress  and 2 Plane  Strain  Condition
