@@ -1,3 +1,6 @@
+networks:
+  app-network:
+    driver: bridge
 services:
   frontend:
     build:
@@ -12,6 +15,8 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+    networks:
+    - app-network
 
   backend:
     build:
@@ -26,6 +31,8 @@ services:
     environment:
       - GENIE_ENV=dev
       - JULIA_REVISE=on
+    networks:
+    - app-network
 
   api-gateway:
     image: tiangolo/uvicorn-gunicorn-fastapi:python3.11
@@ -47,6 +54,8 @@ services:
       interval: 120s
       timeout: 10s
       retries: 3
+    networks:
+    - app-network
 
   mesh-utils:
     build:
@@ -54,9 +63,11 @@ services:
       dockerfile: Dockerfile.dev
     container_name: mesh-utils
     ports:
-      - "8001:8000"
+      - "8001:8001"
     volumes:
       - ./backend:/home/genie/app
     environment:
       - GENIE_ENV=dev
       - JULIA_REVISE=on
+    networks:
+    - app-network
