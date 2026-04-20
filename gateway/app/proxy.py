@@ -24,7 +24,8 @@ async def forward_request(service: str, path: str, request: Request) -> Response
                 params=dict(request.query_params),
                 headers=headers,
                 content=req_content,
-                follow_redirects=True
+                follow_redirects=True,
+                timeout=None,
             )
         except httpx.RequestError as e:
             raise HTTPException(status_code=502, detail=f"Upstream request failed: {str(e)}")
