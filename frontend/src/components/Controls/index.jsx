@@ -73,7 +73,7 @@ export default function Controls({
         const arrLen = boundaryConditions.length;
         let conflicts = false;
         let bc;
-        if (arrLen === 0)
+        if (arrLen === 0 && beamType === "general")
         {
             alert("No boundary conditions applied. Create boundary conditions")
             conflicts = true;
